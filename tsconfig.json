@@ -2,6 +2,20 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "@myrmidon/pythia-api": [
+        "dist/myrmidon/pythia-api/myrmidon-pythia-api",
+        "dist/myrmidon/pythia-api"
+      ],
+      "@myrmidon/pythia-core": [
+        "dist/myrmidon/pythia-core/myrmidon-pythia-core",
+        "dist/myrmidon/pythia-core"
+      ],
+      "@myrmidon/pythia-material": [
+        "dist/myrmidon/pythia-material/myrmidon-pythia-material",
+        "dist/myrmidon/pythia-material"
+      ]
+    },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
