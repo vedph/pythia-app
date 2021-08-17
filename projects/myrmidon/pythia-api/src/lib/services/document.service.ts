@@ -103,7 +103,7 @@ export class DocumentService {
     }
 
     return this._http
-      .get<DataPage<Document>>(this._env.get('apiUrl') + '/documents', {
+      .get<DataPage<Document>>(this._env.get('apiUrl') + 'documents', {
         params: httpParams,
       })
       .pipe(retry(3), catchError(this._error.handleError));
@@ -116,7 +116,7 @@ export class DocumentService {
    */
   public getDocument(id: number): Observable<Document> {
     return this._http
-      .get<Document>(this._env.get('apiUrl') + '/documents/' + id)
+      .get<Document>(this._env.get('apiUrl') + 'documents/' + id)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 }

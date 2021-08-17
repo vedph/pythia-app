@@ -44,7 +44,7 @@ export class AttributeService {
     }
 
     return this._http
-      .get<string[]>(this._env.get('apiUrl') + '/attributes', {
+      .get<string[]>(this._env.get('apiUrl') + 'attributes', {
         params: httpParams,
       })
       .pipe(retry(3), catchError(this._error.handleError));

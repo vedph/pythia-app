@@ -9,6 +9,13 @@
   items: T[];
 }
 
+export interface Corpus {
+  id: string;
+  title: string;
+  description: string;
+  documentIds?: number[];
+}
+
 export interface Attribute {
   targetId: number;
   name: string;
