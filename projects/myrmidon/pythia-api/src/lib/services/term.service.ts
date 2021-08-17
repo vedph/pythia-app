@@ -1,22 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  DataPage,
-  EnvService,
-  ErrorService,
-  Document,
-} from '@myrmidon/pythia-core';
+import { ErrorService, EnvService, DataPage, IndexTerm } from '@myrmidon/pythia-core';
 import { Observable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
-export enum DocumentSortOrder {
-  Default = 0,
-  Author,
-  Title,
-  Date,
-}
-
-export interface DocumentFilter {
+export interface TermFilter {
   pageNumber: number;
   pageSize: number;
   corpusId?: string;
@@ -28,27 +16,33 @@ export interface DocumentFilter {
   maxDateValue?: number;
   minTimeModified?: Date;
   maxTimeModified?: Date;
-  attributes?: string; // name=value (CSV)
-  sortOrder?: DocumentSortOrder;
+  docAttributes?: string; // name=value CSV
+  tokAttributes?: string; // name=value CSV
+  valuePattern?: string; // wildcards: ? and *
+  minCount?: number;
+  maxCount?: number;
+  sortOrder?: TermSortOrder;
   descending?: boolean;
+}
+
+export enum TermSortOrder {
+  Default = 0,
+  ByValue,
+  ByReversedValue,
+  ByCount,
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class DocumentService {
+export class TermService {
   constructor(
     private _http: HttpClient,
     private _error: ErrorService,
     private _env: EnvService
   ) {}
 
-  /**
-   * Get the specified page of documents.
-   * @param filter The filter.
-   * @returns Observable with a page of documents.
-   */
-  public getDocuments(filter: DocumentFilter): Observable<DataPage<Document>> {
+  public getTerms(filter: TermFilter): Observable<DataPage<IndexTerm>> {
     let httpParams = new HttpParams();
     httpParams = httpParams.set('pageNumber', filter.pageNumber.toString());
     httpParams = httpParams.set('pageSize', filter.pageSize.toString());
@@ -92,8 +86,20 @@ export class DocumentService {
         filter.maxTimeModified.toString()
       );
     }
-    if (filter.attributes) {
-      httpParams = httpParams.set('attributes', filter.attributes);
+    if (filter.docAttributes) {
+      httpParams = httpParams.set('docAttributes', filter.docAttributes);
+    }
+    if (filter.tokAttributes) {
+      httpParams = httpParams.set('tokAttributes', filter.tokAttributes);
+    }
+    if (filter.valuePattern) {
+      httpParams = httpParams.set('valuePattern', filter.valuePattern);
+    }
+    if (filter.minCount) {
+      httpParams = httpParams.set('minCount', filter.minCount.toString());
+    }
+    if (filter.maxCount) {
+      httpParams = httpParams.set('maxCount', filter.maxCount.toString());
     }
     if (filter.sortOrder) {
       httpParams = httpParams.set('sort', filter.sortOrder.toString());
@@ -103,20 +109,9 @@ export class DocumentService {
     }
 
     return this._http
-      .get<DataPage<Document>>(this._env.get('apiUrl') + 'documents', {
+      .get<DataPage<IndexTerm>>(this._env.get('apiUrl') + 'terms', {
         params: httpParams,
       })
-      .pipe(retry(3), catchError(this._error.handleError));
-  }
-
-  /**
-   * Get the document with the specified ID.
-   * @param id The document's ID.
-   * @returns Oservable with document.
-   */
-  public getDocument(id: number): Observable<Document> {
-    return this._http
-      .get<Document>(this._env.get('apiUrl') + 'documents/' + id)
       .pipe(retry(3), catchError(this._error.handleError));
   }
 }

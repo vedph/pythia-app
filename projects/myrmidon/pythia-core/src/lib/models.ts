@@ -35,6 +35,11 @@ export interface Document {
   content?: string;
 }
 
+export interface IndexTerm {
+  value: string;
+  count: number;
+}
+
 /**
  * Essential information about a user.
  */
