@@ -40,6 +40,15 @@ export interface IndexTerm {
   count: number;
 }
 
+export interface TextMapNode {
+  label: string;
+  location: string;
+  start: number;
+  end: number;
+  selected?: boolean;
+  children?: TextMapNode[];
+}
+
 /**
  * Essential information about a user.
  */
