@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DocumentFilter } from '@myrmidon/pythia-api';
-import { Corpus } from '@myrmidon/pythia-core';
+import { Corpus, Profile } from '@myrmidon/pythia-core';
 import { Observable } from 'rxjs';
 
 import { DocumentsQuery } from '../state/documents.query';
@@ -25,7 +25,7 @@ export class DocumentFilterComponent implements OnInit {
   public author: FormControl;
   public title: FormControl;
   public source: FormControl;
-  public profileId: FormControl;
+  public profile: FormControl;
   public minDateValue: FormControl;
   public maxDateValue: FormControl;
   public minTimeModified: FormControl;
@@ -49,7 +49,7 @@ export class DocumentFilterComponent implements OnInit {
     this.author = formBuilder.control(null);
     this.title = formBuilder.control(null);
     this.source = formBuilder.control(null);
-    this.profileId = formBuilder.control(null);
+    this.profile = formBuilder.control(null);
     this.minDateValue = formBuilder.control(null);
     this.maxDateValue = formBuilder.control(null);
     this.minTimeModified = formBuilder.control(null);
@@ -62,7 +62,7 @@ export class DocumentFilterComponent implements OnInit {
       author: this.author,
       title: this.title,
       source: this.source,
-      profileId: this.profileId,
+      profile: this.profile,
       minDateValue: this.minDateValue,
       maxDateValue: this.maxDateValue,
       minTimeModified: this.minTimeModified,
@@ -83,6 +83,14 @@ export class DocumentFilterComponent implements OnInit {
 
   public onCorpusRemoved(): void {
     this.corpus.reset();
+  }
+
+  public onProfileChange(profile: Profile | null): void {
+    this.profile.setValue(profile);
+  }
+
+  public onProfileRemoved(): void {
+    this.profile.reset();
   }
 
   public reset(): void {

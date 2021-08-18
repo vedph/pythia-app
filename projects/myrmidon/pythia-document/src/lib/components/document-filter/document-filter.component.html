@@ -50,6 +50,20 @@
     </mat-form-field>
   </div>
 
+  <!-- profile -->
+  <div>
+    <pythia-lookup-profile
+      label="profile"
+      (itemChange)="onProfileChange($event)"
+    ></pythia-lookup-profile>
+    <mat-chip
+      *ngIf="profile.value"
+      removable="true"
+      (removed)="onProfileRemoved()"
+    >
+      {{ profile.value.id }}
+    </mat-chip>
+  </div>
   TODO
 
   <!-- minYear -->
@@ -67,25 +81,24 @@
   </div>
 
   <!-- attributes -->
-  <div>
-  </div>
+  <div></div>
 
   <!-- sort -->
   <div *ngIf="sortable">
     <br />
     <div>
       <mat-form-field>
-        <mat-select formControlName="sortType" placeholder="ordinamento">
-          <mat-option *ngFor="let p of sortTypes" [value]="p">{{
-            p?.label
-          }}</mat-option>
+        <mat-select [formControl]="sortOrder" placeholder="sort">
+          <mat-option [value]="0">default</mat-option>
+          <mat-option [value]="1">author</mat-option>
+          <mat-option [value]="2">title</mat-option>
+          <mat-option [value]="3">date</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
-
     <!-- sort descending -->
     <div>
-      <mat-checkbox formControlName="sortDescending">discendente</mat-checkbox>
+      <mat-checkbox [formControl]="descending">descending</mat-checkbox>
     </div>
   </div>
   <!-- sortable -->
