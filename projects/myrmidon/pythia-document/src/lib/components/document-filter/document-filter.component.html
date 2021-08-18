@@ -64,28 +64,128 @@
       {{ profile.value.id }}
     </mat-chip>
   </div>
-  TODO
 
-  <!-- minYear -->
+  <!-- date -->
   <div>
+    <!-- minDateValue -->
     <mat-form-field>
-      <input matInput formControlName="minDate" placeholder="data min." />
+      <input
+        matInput
+        type="number"
+        [formControl]="minDateValue"
+        placeholder="min.date"
+      />
+    </mat-form-field>
+    &nbsp;-&nbsp;
+    <!-- maxDateValue -->
+    <mat-form-field>
+      <input
+        matInput
+        type="number"
+        [formControl]="maxDateValue"
+        placeholder="max.date"
+      />
     </mat-form-field>
   </div>
 
-  <!-- maxYear -->
+  <!-- time -->
   <div>
+    <!-- minTimeModified -->
     <mat-form-field>
-      <input matInput formControlName="maxDate" placeholder="data max." />
+      <input
+        matInput
+        type="date"
+        [formControl]="minTimeModified"
+        placeholder="min.modified"
+      />
+    </mat-form-field>
+    &nbsp;-&nbsp;
+    <mat-form-field>
+      <input
+        matInput
+        type="date"
+        [formControl]="maxTimeModified"
+        placeholder="max.modified"
+      />
     </mat-form-field>
   </div>
 
   <!-- attributes -->
-  <div></div>
+  <div>
+    <h3>attributes</h3>
+    <div formArrayName="attributes" *ngIf="(attributes$ | async)?.length">
+      <div>
+        <button
+          type="button"
+          mat-icon-button
+          color="primary"
+          (click)="addAttribute()"
+        >
+          <mat-icon>add_circle</mat-icon>
+          add attribute
+        </button>
+      </div>
+      <div
+        *ngFor="
+          let item of attributes.controls;
+          let i = index;
+          let first = first;
+          let last = last
+        "
+      >
+        <!-- child form -->
+        <div [formGroupName]="i">
+          <!-- child actions -->
+          {{ i + 1 }}.
+          <button
+            mat-icon-button
+            type="button"
+            matTooltip="Remove this Attribute"
+            color="warn"
+            (click)="removeAttribute(i)"
+          >
+            <mat-icon>remove_circle</mat-icon>
+          </button>
+
+          <!-- child controls -->
+          <!-- name -->
+          <mat-form-field style="width: 8em">
+            <mat-select formControlName="name" placeholder="name">
+              <mat-option *ngFor="let n of attributes$ | async" [value]="n">{{
+                n
+              }}</mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                $any(item)['controls'].name.errors?.required &&
+                ($any(item)['controls'].name.dirty ||
+                  $any(item)['controls'].name.touched)
+              "
+              >name required</mat-error
+            >
+          </mat-form-field>
+
+          <!-- value -->
+          &nbsp;=&nbsp;
+          <mat-form-field style="width: 8em;">
+            <input matInput formControlName="value" placeholder="value" />
+            <mat-error
+              *ngIf="
+                $any(item)['controls'].value.errors?.maxLength &&
+                ($any(item)['controls'].value.dirty ||
+                  $any(item)['controls'].value.touched)
+              "
+              >too long</mat-error
+            >
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- sort -->
   <div *ngIf="sortable">
-    <br />
+    <h3>sort order</h3>
     <div>
       <mat-form-field>
         <mat-select [formControl]="sortOrder" placeholder="sort">
@@ -95,13 +195,11 @@
           <mat-option [value]="3">date</mat-option>
         </mat-select>
       </mat-form-field>
-    </div>
-    <!-- sort descending -->
-    <div>
+      <!-- sort descending -->
+      &nbsp;
       <mat-checkbox [formControl]="descending">descending</mat-checkbox>
     </div>
   </div>
-  <!-- sortable -->
 
   <br />
   <div

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   AttributeFilterType,
   AttributeService,
+  DocumentFilter,
   DocumentService,
 } from '@myrmidon/pythia-api';
 import { take } from 'rxjs/operators';
@@ -16,9 +17,9 @@ export class DocumentsService {
   ) {}
 
   /**
-   * Update lookup data in the store.
+   * Load lookup data in the store.
    */
-  public updateLookup(): void {
+  public loadLookup(): void {
     this._attrService
       .getAttributeNames({
         pageNumber: 1,
@@ -31,5 +32,15 @@ export class DocumentsService {
           attributes: names,
         });
       });
+  }
+
+  /**
+   * Update the filter in the store.
+   * @param filter The filter.
+   */
+  public updateFilter(filter: DocumentFilter): void {
+    this._store.update({
+      filter: filter
+    });
   }
 }

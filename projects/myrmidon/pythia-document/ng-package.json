@@ -6,7 +6,8 @@
     "umdModuleIds": {
       "@myrmidon/pythia-api": "@myrmidon/pythia-api",
       "@myrmidon/pythia-core": "@myrmidon/pythia-core",
-      "@myrmidon/pythia-material": "@myrmidon/pythia-material"
+      "@myrmidon/pythia-material": "@myrmidon/pythia-material",
+      "@datorama/akita": "@datorama/akita"
     }
   }
 }

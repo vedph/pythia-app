@@ -1,7 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { DocumentFilter } from '@myrmidon/pythia-api';
-import { Corpus, Profile } from '@myrmidon/pythia-core';
+import { Attribute, Corpus, Profile } from '@myrmidon/pythia-core';
 import { Observable } from 'rxjs';
 
 import { DocumentsQuery } from '../state/documents.query';
@@ -36,7 +42,7 @@ export class DocumentFilterComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
-    formBuilder: FormBuilder,
+    private _formBuilder: FormBuilder,
     query: DocumentsQuery,
     private _docsService: DocumentsService
   ) {
@@ -45,19 +51,19 @@ export class DocumentFilterComponent implements OnInit {
     this.sortable = true;
 
     // form
-    this.corpus = formBuilder.control(null);
-    this.author = formBuilder.control(null);
-    this.title = formBuilder.control(null);
-    this.source = formBuilder.control(null);
-    this.profile = formBuilder.control(null);
-    this.minDateValue = formBuilder.control(null);
-    this.maxDateValue = formBuilder.control(null);
-    this.minTimeModified = formBuilder.control(null);
-    this.maxTimeModified = formBuilder.control(null);
-    this.attributes = formBuilder.array([]);
-    this.sortOrder = formBuilder.control(0);
-    this.descending = formBuilder.control(false);
-    this.form = formBuilder.group({
+    this.corpus = _formBuilder.control(null);
+    this.author = _formBuilder.control(null);
+    this.title = _formBuilder.control(null);
+    this.source = _formBuilder.control(null);
+    this.profile = _formBuilder.control(null);
+    this.minDateValue = _formBuilder.control(null);
+    this.maxDateValue = _formBuilder.control(null);
+    this.minTimeModified = _formBuilder.control(null);
+    this.maxTimeModified = _formBuilder.control(null);
+    this.attributes = _formBuilder.array([]);
+    this.sortOrder = _formBuilder.control(0);
+    this.descending = _formBuilder.control(false);
+    this.form = _formBuilder.group({
       corpus: this.corpus,
       author: this.author,
       title: this.title,
@@ -74,7 +80,46 @@ export class DocumentFilterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._docsService.updateLookup();
+    this._docsService.loadLookup();
+    this.filter$.subscribe((f) => {
+      this.updateForm(f);
+    });
+  }
+
+  private parseAttributes(csv?: string): Attribute[] {
+    if (!csv) {
+      return [];
+    }
+    const pairRegex = /^\s*([^=]+)=(.*)\s*/;
+    return csv
+      .split(',')
+      .map((p) => {
+        const m = pairRegex.exec(p);
+        return m ? { targetId: 0, name: m[1], value: m[2] } : null;
+      })
+      .filter((a) => a) as Attribute[];
+  }
+
+  private updateForm(filter: DocumentFilter): void {
+    this.corpus.setValue(filter.corpusId);
+    this.author.setValue(filter.author);
+    this.title.setValue(filter.title);
+    this.source.setValue(filter.source);
+    this.profile.setValue({ id: filter.profileId });
+    this.minDateValue.setValue(filter.minDateValue);
+    this.maxDateValue.setValue(filter.maxDateValue);
+    this.minTimeModified.setValue(filter.minTimeModified);
+    this.maxTimeModified.setValue(filter.maxTimeModified);
+    this.sortOrder.setValue(filter.sortOrder || 0);
+    this.descending.setValue(filter.descending? true : false);
+
+    this.attributes.reset();
+    const attrs = this.parseAttributes(filter.attributes);
+    for (let i = 0; i < attrs.length; i++) {
+      this.attributes.push(this.getAttributeGroup(attrs[i]));
+    }
+
+    this.form.markAsPristine();
   }
 
   public onCorpusChange(corpus: Corpus | null): void {
@@ -93,12 +138,69 @@ export class DocumentFilterComponent implements OnInit {
     this.profile.reset();
   }
 
+  //#region Attributes
+  private getAttributeGroup(item?: Attribute): FormGroup {
+    return this._formBuilder.group({
+      name: this._formBuilder.control(item?.name, Validators.required),
+      value: this._formBuilder.control(item?.value, Validators.maxLength(100)),
+    });
+  }
+
+  public addAttribute(item?: Attribute): void {
+    this.attributes.push(this.getAttributeGroup(item));
+    this.attributes.markAsDirty();
+  }
+
+  public removeAttribute(index: number): void {
+    this.attributes.removeAt(index);
+    this.attributes.markAsDirty();
+  }
+
+  private getAttributes(): Attribute[] | undefined {
+    const entries: Attribute[] = [];
+    for (let i = 0; i < this.attributes.length; i++) {
+      const g = this.attributes.at(i) as FormGroup;
+      entries.push({
+        targetId: 0, // not used
+        name: g.controls.name.value?.trim(),
+        value: g.controls.name.value?.trim(),
+      });
+    }
+    return entries.length ? entries : undefined;
+  }
+  //#endregion
+
+  private getFilter(): DocumentFilter {
+    return {
+      pageNumber: 1, // not used
+      pageSize: 20, // not used
+      corpusId: this.corpus.value,
+      author: this.author.value?.trim(),
+      title: this.title.value?.trim(),
+      source: this.source.value?.trim(),
+      profileId: this.profile.value?.id,
+      minDateValue: this.minDateValue.value,
+      maxDateValue: this.maxDateValue.value,
+      minTimeModified: this.minTimeModified.value,
+      maxTimeModified: this.maxTimeModified.value,
+      attributes: this.getAttributes()
+        ?.map((a) => `${a.name}=${a.value}`)
+        ?.join(','),
+      sortOrder: this.sortOrder.value,
+      descending: this.descending.value ? true : false,
+    };
+  }
+
   public reset(): void {
     this.form.reset();
-    // TODO
+    this.apply();
   }
 
   public apply(): void {
-    // TODO
+    if (this.form.invalid) {
+      return;
+    }
+    const filter = this.getFilter();
+    this._docsService.updateFilter(filter);
   }
 }
