@@ -7,8 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build-core": "ng build @myrmidon/pythia-core --configuration=production && ng build @myrmidon/pythia-material --configuration=production",
-    "build-api": "ng build @myrmidon/pythia-api --configuration=production"
+    "build-core": "ng build @myrmidon/pythia-core && ng build @myrmidon/pythia-material",
+    "build-api": "ng build @myrmidon/pythia-api"
   },
   "private": true,
   "dependencies": {

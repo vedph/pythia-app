@@ -1,4 +1,6 @@
-# PythiaApi
+# Pythia API
+
+Services to talk to the Pythia API.
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.0.
 
