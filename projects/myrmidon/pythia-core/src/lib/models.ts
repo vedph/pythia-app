@@ -9,6 +9,15 @@
   items: T[];
 }
 
+/**
+ * A wrapper for a value and an error message. Any of the two should
+ * be provided by the server.
+ */
+export interface ResultWrapper<T> {
+  error?: string;
+  value?: T;
+}
+
 export interface Corpus {
   id: string;
   title: string;
