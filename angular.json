@@ -227,6 +227,37 @@
           }
         }
       }
+    },
+    "@myrmidon/pythia-ui": {
+      "projectType": "library",
+      "root": "projects/myrmidon/pythia-ui",
+      "sourceRoot": "projects/myrmidon/pythia-ui/src",
+      "prefix": "pythia",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/pythia-ui/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/pythia-ui/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/pythia-ui/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/pythia-ui/src/test.ts",
+            "tsConfig": "projects/myrmidon/pythia-ui/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/pythia-ui/karma.conf.js"
+          }
+        }
+      }
     }
   },
   "defaultProject": "pythia"

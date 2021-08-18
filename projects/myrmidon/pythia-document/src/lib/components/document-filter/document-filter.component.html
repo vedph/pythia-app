@@ -1,0 +1,120 @@
+<form [formGroup]="form" (submit)="apply()" ng-disabled="disabled">
+  <!-- corpus -->
+  <div>
+    <pythia-lookup-corpus
+      label="corpus"
+      (itemChange)="onCorpusChange($event)"
+    ></pythia-lookup-corpus>
+    <mat-chip
+      *ngIf="corpus.value"
+      removable="true"
+      (removed)="onCorpusRemoved()"
+    >
+      {{ corpus.value.title }} ({{ corpus.value.id }})
+    </mat-chip>
+  </div>
+
+  <!-- author -->
+  <div>
+    <mat-form-field>
+      <input
+        matInput
+        [formControl]="author"
+        maxlength="500"
+        placeholder="author(s)"
+      />
+    </mat-form-field>
+  </div>
+
+  <!-- title -->
+  <div>
+    <mat-form-field>
+      <input
+        matInput
+        [formControl]="title"
+        maxlength="500"
+        placeholder="title"
+      />
+    </mat-form-field>
+  </div>
+
+  <!-- source -->
+  <div>
+    <mat-form-field>
+      <input
+        matInput
+        [formControl]="source"
+        maxlength="500"
+        placeholder="source"
+      />
+    </mat-form-field>
+  </div>
+
+  TODO
+
+  <!-- minYear -->
+  <div>
+    <mat-form-field>
+      <input matInput formControlName="minDate" placeholder="data min." />
+    </mat-form-field>
+  </div>
+
+  <!-- maxYear -->
+  <div>
+    <mat-form-field>
+      <input matInput formControlName="maxDate" placeholder="data max." />
+    </mat-form-field>
+  </div>
+
+  <!-- attributes -->
+  <div>
+  </div>
+
+  <!-- sort -->
+  <div *ngIf="sortable">
+    <br />
+    <div>
+      <mat-form-field>
+        <mat-select formControlName="sortType" placeholder="ordinamento">
+          <mat-option *ngFor="let p of sortTypes" [value]="p">{{
+            p?.label
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- sort descending -->
+    <div>
+      <mat-checkbox formControlName="sortDescending">discendente</mat-checkbox>
+    </div>
+  </div>
+  <!-- sortable -->
+
+  <br />
+  <div
+    class="btn-group"
+    role="group"
+    aria-label="toolbar"
+    style="margin-bottom: 10px"
+  >
+    <button
+      mat-raised-button
+      type="button"
+      (click)="reset()"
+      color="warn"
+      matTooltip="Reset filters"
+      [disabled]="disabled"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="disabled"
+      matTooltip="Apply filters"
+    >
+      <mat-icon>check_circle</mat-icon>
+    </button>
+  </div>
+</form>

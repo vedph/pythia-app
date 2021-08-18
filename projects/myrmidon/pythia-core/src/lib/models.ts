@@ -31,6 +31,11 @@ export interface Attribute {
   value: string;
 }
 
+export interface Profile {
+  id: string;
+  content?: string;
+}
+
 export interface Document {
   id: number;
   author: string;

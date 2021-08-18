@@ -18,6 +18,10 @@
       "@myrmidon/pythia-material": [
         "dist/myrmidon/pythia-material/myrmidon-pythia-material",
         "dist/myrmidon/pythia-material"
+      ],
+      "@myrmidon/pythia-ui": [
+        "dist/myrmidon/pythia-ui/myrmidon-pythia-ui",
+        "dist/myrmidon/pythia-ui"
       ]
     },
     "baseUrl": "./",
