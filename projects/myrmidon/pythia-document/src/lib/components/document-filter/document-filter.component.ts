@@ -230,13 +230,13 @@ export class DocumentFilterComponent implements OnInit {
     // update filter in state
     this._docsService.updateFilter(filter);
 
-    // filter changed, clear paginator's cache
-    this.paginator.clearCache();
-    // update the page
-    const request = this.getRequest(filter);
-    this.paginator.getPage(request);
+    // // filter changed, clear paginator's cache
+    // this.paginator.clearCache();
+    // // update the page
+    // const request = this.getRequest(filter);
+    // this.paginator.getPage(request);
 
-    // the new filter becomes part of paginator's metadata
-    this.paginator.metadata.set('filter', filter);
+    // // the new filter becomes part of paginator's metadata
+    // this.paginator.metadata.set('filter', filter);
   }
 }

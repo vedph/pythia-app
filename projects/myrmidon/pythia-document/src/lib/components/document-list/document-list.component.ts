@@ -17,6 +17,7 @@ import { DocumentsState } from '../state/documents.store';
 })
 export class DocumentListComponent implements OnInit {
   private _refresh$: BehaviorSubject<number>;
+  private _filter$: Observable<DocumentFilter>;
   public pagination$: Observable<PaginationResponse<Document>>;
   public pageSize: FormControl;
 
@@ -29,6 +30,7 @@ export class DocumentListComponent implements OnInit {
   ) {
     this.pageSize = formBuilder.control(20);
     this._refresh$ = new BehaviorSubject(0);
+    this._filter$ = _docsQuery.selectFilter();
 
     this.pagination$ = combineLatest([
       this.paginator.pageChanges,
@@ -37,6 +39,12 @@ export class DocumentListComponent implements OnInit {
         // as combineLatest emits only if ALL observables have emitted
         startWith(20),
         // clear the cache when page size changes
+        tap((_) => {
+          this.paginator.clearCache();
+        })
+      ),
+      this._filter$.pipe(
+        // clear the cache when filters changed
         tap((_) => {
           this.paginator.clearCache();
         })
@@ -50,13 +58,14 @@ export class DocumentListComponent implements OnInit {
     ]).pipe(
       // for each emitted value, combine into a filter and use it
       // to request the page from server
-      switchMap(([pageNumber, pageSize, refresh]) => {
-        const filter = { ...this._docsQuery.getValue().filter };
-        filter.pageNumber = pageNumber;
-        filter.pageSize = pageSize;
-        const request = this.getRequest(filter);
+      switchMap(([pageNumber, pageSize, filter, refresh]) => {
+        // const filter = { ...this._docsQuery.getValue().filter };
+        const f = { ...filter };
+        f.pageNumber = pageNumber;
+        f.pageSize = pageSize;
+        const request = this.getRequest(f);
         // update saved filters
-        this.paginator.metadata.set('filter', filter);
+        this.paginator.metadata.set('filter', f);
         return this.paginator.getPage(request);
       })
     );
