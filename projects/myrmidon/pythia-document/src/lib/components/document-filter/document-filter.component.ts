@@ -6,11 +6,10 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
+import { PaginatorPlugin } from '@datorama/akita';
 import { DocumentFilter, DocumentService } from '@myrmidon/pythia-api';
-import { Attribute, Corpus, DataPage, Profile, Document } from '@myrmidon/pythia-core';
+import { Attribute, Corpus, Profile } from '@myrmidon/pythia-core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { DOCUMENTS_PAGINATOR } from '../state/documents.paginator';
 
 import { DocumentsQuery } from '../state/documents.query';
@@ -203,24 +202,6 @@ export class DocumentFilterComponent implements OnInit {
     this.apply();
   }
 
-  private getRequest(
-    filter: DocumentFilter
-  ): () => Observable<PaginationResponse<Document>> {
-    return () =>
-      this._docService.getDocuments(filter).pipe(
-        // adapt server results to the paginator plugin
-        map((p: DataPage<Document>) => {
-          return {
-            currentPage: p.pageNumber,
-            perPage: p.pageSize,
-            lastPage: p.pageCount,
-            data: p.items,
-            total: p.total,
-          };
-        })
-      );
-  }
-
   public apply(): void {
     if (this.form.invalid) {
       return;
@@ -229,14 +210,5 @@ export class DocumentFilterComponent implements OnInit {
 
     // update filter in state
     this._docsService.updateFilter(filter);
-
-    // // filter changed, clear paginator's cache
-    // this.paginator.clearCache();
-    // // update the page
-    // const request = this.getRequest(filter);
-    // this.paginator.getPage(request);
-
-    // // the new filter becomes part of paginator's metadata
-    // this.paginator.metadata.set('filter', filter);
   }
 }

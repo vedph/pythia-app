@@ -18,19 +18,21 @@ import { DocumentsState } from '../state/documents.store';
 export class DocumentListComponent implements OnInit {
   private _refresh$: BehaviorSubject<number>;
   private _filter$: Observable<DocumentFilter>;
+
   public pagination$: Observable<PaginationResponse<Document>>;
   public pageSize: FormControl;
+  public selectedDocument: Document | undefined;
 
   constructor(
     @Inject(DOCUMENTS_PAGINATOR)
     public paginator: PaginatorPlugin<DocumentsState>,
     private _docService: DocumentService,
-    private _docsQuery: DocumentsQuery,
+    docsQuery: DocumentsQuery,
     formBuilder: FormBuilder
   ) {
     this.pageSize = formBuilder.control(20);
     this._refresh$ = new BehaviorSubject(0);
-    this._filter$ = _docsQuery.selectFilter();
+    this._filter$ = docsQuery.selectFilter();
 
     this.pagination$ = combineLatest([
       this.paginator.pageChanges,

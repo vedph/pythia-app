@@ -7,6 +7,7 @@ import { PythiaCoreModule } from '@myrmidon/pythia-core';
 import { PythiaMaterialModule } from '@myrmidon/pythia-material';
 
 import { DocumentFilterComponent } from './components/document-filter/document-filter.component';
+import { DocumentInfoComponent } from './components/document-info/document-info.component';
 import { DocumentListComponent } from './components/document-list/document-list.component';
 import { LookupCorpusComponent } from './components/lookup-corpus/lookup-corpus.component';
 import { LookupProfileComponent } from './components/lookup-profile/lookup-profile.component';
@@ -14,6 +15,7 @@ import { LookupProfileComponent } from './components/lookup-profile/lookup-profi
 @NgModule({
   declarations: [
     DocumentFilterComponent,
+    DocumentInfoComponent,
     DocumentListComponent,
     LookupCorpusComponent,
     LookupProfileComponent,
@@ -29,6 +31,7 @@ import { LookupProfileComponent } from './components/lookup-profile/lookup-profi
   ],
   exports: [
     DocumentFilterComponent,
+    DocumentInfoComponent,
     DocumentListComponent,
     LookupCorpusComponent,
     LookupProfileComponent
