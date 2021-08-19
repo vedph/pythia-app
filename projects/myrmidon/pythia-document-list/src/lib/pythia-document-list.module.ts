@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { PythiaApiModule } from '@myrmidon/pythia-api';
-import { PythiaCoreModule } from '@myrmidon/pythia-core';
+import { EnvServiceProvider, PythiaCoreModule } from '@myrmidon/pythia-core';
 import { PythiaMaterialModule } from '@myrmidon/pythia-material';
 
 import { DocumentFilterComponent } from './components/document-filter/document-filter.component';
@@ -27,14 +27,17 @@ import { LookupProfileComponent } from './components/lookup-profile/lookup-profi
     // Pythia
     PythiaApiModule,
     PythiaCoreModule,
-    PythiaMaterialModule
+    PythiaMaterialModule,
   ],
   exports: [
     DocumentFilterComponent,
     DocumentInfoComponent,
     DocumentListComponent,
     LookupCorpusComponent,
-    LookupProfileComponent
+    LookupProfileComponent,
   ],
+  providers: [
+    EnvServiceProvider,
+  ]
 })
-export class PythiaDocumentModule {}
+export class PythiaDocumentListModule {}

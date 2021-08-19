@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, '../../../coverage/myrmidon/pythia-document'),
+      dir: require('path').join(__dirname, '../../../coverage/myrmidon/pythia-document-list'),
       subdir: '.',
       reporters: [
         { type: 'html' },

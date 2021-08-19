@@ -3,7 +3,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
 import { DocumentFilter, DocumentService } from '@myrmidon/pythia-api';
-import { DataPage, Document } from '@myrmidon/pythia-core';
+import { DataPage, deepCopy, Document } from '@myrmidon/pythia-core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, startWith, switchMap, tap } from 'rxjs/operators';
 import { DOCUMENTS_PAGINATOR } from '../state/documents.paginator';
@@ -103,5 +103,9 @@ export class DocumentListComponent implements OnInit {
 
   public refresh(): void {
     this._refresh$.next(this._refresh$.value + 1);
+  }
+
+  public showInfo(document: Document): void {
+    this.selectedDocument = deepCopy(document);
   }
 }

@@ -6,14 +6,14 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HomeComponent } from './components/home/home.component';
-import { PythiaMaterialModule } from 'projects/myrmidon/pythia-material/src/public-api';
-import { PythiaCoreModule } from 'projects/myrmidon/pythia-core/src/public-api';
-import { PythiaApiModule } from 'projects/myrmidon/pythia-api/src/public-api';
-import { EnvServiceProvider } from '@myrmidon/pythia-core';
-import { AuthInterceptor } from '@myrmidon/pythia-api';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
-import { PythiaDocumentModule } from 'projects/myrmidon/pythia-document/src/public-api';
+
+import { HomeComponent } from './components/home/home.component';
+
+import { PythiaApiModule, AuthInterceptor } from 'projects/myrmidon/pythia-api/src/public-api';
+import { PythiaCoreModule, EnvServiceProvider } from 'projects/myrmidon/pythia-core/src/public-api';
+import { PythiaDocumentListModule } from 'projects/myrmidon/pythia-document-list/src/public-api';
+import { PythiaMaterialModule } from 'projects/myrmidon/pythia-material/src/public-api';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -30,7 +30,7 @@ import { PythiaDocumentModule } from 'projects/myrmidon/pythia-document/src/publ
     PythiaCoreModule,
     PythiaMaterialModule,
     PythiaApiModule,
-    PythiaDocumentModule
+    PythiaDocumentListModule
   ],
   providers: [
     EnvServiceProvider,

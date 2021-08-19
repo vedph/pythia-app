@@ -32,7 +32,7 @@
       </tr>
     </tbody>
   </table>
-  <br>
+  <br />
   <div>
     <button
       type="button"
@@ -43,5 +43,15 @@
     >
       <mat-icon>auto_stories</mat-icon> read
     </button>
+    &nbsp;
+    <button
+      type="button"
+      mat-icon-button
+      matTooltip="Close this info"
+      color="warn"
+      (click)="document=undefined"
+    >
+    <mat-icon>cancel</mat-icon> close
+  </button>
   </div>
 </fieldset>
