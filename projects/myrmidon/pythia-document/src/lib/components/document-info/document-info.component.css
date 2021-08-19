@@ -4,6 +4,7 @@ fieldset {
 }
 .author {
   font-variant: small-caps;
+  font-size: 110%;
   color: #c04f05;
 }
 .title {
