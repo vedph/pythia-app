@@ -1,0 +1,148 @@
+.tree-invisible {
+  display: none;
+}
+.tree ul,
+.tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+div#map {
+  font-size: 0.9rem;
+  margin-right: 10px;
+  border-radius: 10px;
+}
+div#text {
+  color: #202020;
+}
+
+:host ::ng-deep article.rendition {
+  font-family: Calibri, sans-serif;
+}
+:host ::ng-deep article.rendition .subh {
+  font-size: 105%;
+}
+:host ::ng-deep article.rendition p.l {
+  padding-left: 20px;
+}
+:host ::ng-deep article.rendition th.lncol {
+  width: 4em;
+}
+:host ::ng-deep article.rendition span.ln {
+  color: #b3f7aa;
+}
+:host ::ng-deep article.rendition span.spk {
+  color: #f7e0aa;
+}
+:host ::ng-deep article.rendition p.ind {
+  text-indent: 20px;
+}
+:host ::ng-deep article.rendition span.r-b {
+  font-weight: bold;
+}
+:host ::ng-deep article.rendition span.r-i {
+  font-style: italic;
+}
+:host ::ng-deep article.rendition span.r-u {
+  text-decoration: underline;
+}
+:host ::ng-deep article.rendition span.r-bi {
+  font-weight: bold;
+  font-style: italic;
+}
+:host ::ng-deep article.rendition span.r-bu {
+  font-style: italic;
+  text-decoration: underline;
+}
+:host ::ng-deep article.rendition span.r-iu {
+  font-style: italic;
+  text-decoration: underline;
+}
+:host ::ng-deep article.rendition span.r-hit {
+  background-color: #f8ff3d;
+}
+:host ::ng-deep article.rendition span.distinct {
+  color: #693d3d;
+}
+:host ::ng-deep article.rendition span.foreign {
+  color: #336b87;
+}
+:host ::ng-deep article.rendition span.persName {
+  color: #598234;
+}
+:host ::ng-deep article.rendition span.geogName {
+  color: #339966;
+}
+:host ::ng-deep article.rendition table td.ln {
+  color: silver;
+  padding-right: 8px;
+  font-size: 80%;
+}
+:host ::ng-deep article.rendition span.sp {
+  font-variant: small-caps;
+}
+:host ::ng-deep article.rendition div.stage {
+  color: silver;
+  font-style: italic;
+}
+:host ::ng-deep article.rendition span.b {
+  font-weight: bold;
+}
+:host ::ng-deep article.rendition span.i {
+  font-style: italic;
+}
+:host ::ng-deep article.rendition span.u {
+  text-decoration: underline;
+}
+:host ::ng-deep article.rendition span.b.i {
+  font-weight: bold;
+  font-style: italic;
+}
+:host ::ng-deep article.rendition span.b.u {
+  font-weight: bold;
+  text-decoration: underline;
+}
+:host ::ng-deep article.rendition span.i.u {
+  font-style: italic;
+  text-decoration: underline;
+}
+:host ::ng-deep article.rendition span.i.b.u {
+  font-style: italic;
+  font-weight: bold;
+  text-decoration: underline;
+}
+:host ::ng-deep article.rendition span.pb {
+  background-color: #3ed8a5;
+  color: white;
+  padding: 2px;
+}
+/* cmx */
+:host ::ng-deep article.rendition div.panel {
+  margin: 8px 0 8px 0;
+  padding: 4px;
+  border: 1px solid #a0a0a0;
+}
+:host ::ng-deep article.rendition div.panel small {
+  font-style: italic;
+  font-size: 90%;
+  color: silver;
+  margin: 0 6px 0 6px;
+}
+:host ::ng-deep article.rendition div.panel div.caption {
+  color: #339966;
+  border: 1px solid #e0e0e0;
+  margin: 2px;
+}
+:host ::ng-deep article.rendition div.panel p.bln {
+  background-color: beige;
+  border: 1px solid #e0e0e0;
+  margin: 2px;
+}
+:host ::ng-deep article.rendition div.panel span.who {
+  font-variant: small-caps;
+  font-size: 90%;
+  color: #b0b0b0;
+}
+:host ::ng-deep article.rendition div.panel span.sound {
+  color: brown;
+}

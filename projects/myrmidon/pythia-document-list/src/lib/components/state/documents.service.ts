@@ -3,7 +3,6 @@ import {
   AttributeFilterType,
   AttributeService,
   DocumentFilter,
-  DocumentService,
 } from '@myrmidon/pythia-api';
 import { take } from 'rxjs/operators';
 import { DocumentsStore } from './documents.store';
@@ -11,7 +10,6 @@ import { DocumentsStore } from './documents.store';
 @Injectable({ providedIn: 'root' })
 export class DocumentsService {
   constructor(
-    private _docService: DocumentService,
     private _attrService: AttributeService,
     private _store: DocumentsStore
   ) {}

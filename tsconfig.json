@@ -19,6 +19,10 @@
         "dist/myrmidon/pythia-document-list/myrmidon-pythia-document-list",
         "dist/myrmidon/pythia-document-list"
       ],
+      "@myrmidon/pythia-document-reader": [
+        "dist/myrmidon/pythia-document-reader/myrmidon-pythia-document-reader",
+        "dist/myrmidon/pythia-document-reader"
+      ],
       "@myrmidon/pythia-material": [
         "dist/myrmidon/pythia-material/myrmidon-pythia-material",
         "dist/myrmidon/pythia-material"

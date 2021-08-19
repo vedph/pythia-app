@@ -14,6 +14,7 @@ import { PythiaApiModule, AuthInterceptor } from 'projects/myrmidon/pythia-api/s
 import { PythiaCoreModule, EnvServiceProvider } from 'projects/myrmidon/pythia-core/src/public-api';
 import { PythiaDocumentListModule } from 'projects/myrmidon/pythia-document-list/src/public-api';
 import { PythiaMaterialModule } from 'projects/myrmidon/pythia-material/src/public-api';
+import { PythiaDocumentReaderModule } from 'projects/myrmidon/pythia-document-reader/src/public-api';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -30,7 +31,8 @@ import { PythiaMaterialModule } from 'projects/myrmidon/pythia-material/src/publ
     PythiaCoreModule,
     PythiaMaterialModule,
     PythiaApiModule,
-    PythiaDocumentListModule
+    PythiaDocumentListModule,
+    PythiaDocumentReaderModule
   ],
   providers: [
     EnvServiceProvider,

@@ -61,6 +61,7 @@ export interface TextMapNode {
   end: number;
   selected?: boolean;
   children?: TextMapNode[];
+  parent?: TextMapNode;
 }
 
 /**

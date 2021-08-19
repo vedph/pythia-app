@@ -99,4 +99,22 @@ export class ReaderService {
       )
       .pipe(retry(3), catchError(this._error.handleError));
   }
+
+  /**
+   * Get the path to the specified text map node.
+   * @param node The node.
+   * @returns The path.
+   */
+  public getNodePath(node: TextMapNode): string {
+    const sb: string[] = [];
+    sb.push('0'); // 0=root node
+
+    while (node && node.parent) {
+      const i = node.parent?.children?.indexOf(node) || -1;
+      sb.push(i.toString());
+      node = node.parent;
+    }
+
+    return sb.join('.');
+  }
 }
