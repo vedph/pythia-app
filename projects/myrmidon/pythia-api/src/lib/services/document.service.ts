@@ -92,7 +92,7 @@ export class DocumentService {
         filter.maxTimeModified.toString()
       );
     }
-    if (filter.attributes) {
+    if (filter.attributes?.length) {
       httpParams = httpParams.set('attributes', filter.attributes);
     }
     if (filter.sortOrder) {

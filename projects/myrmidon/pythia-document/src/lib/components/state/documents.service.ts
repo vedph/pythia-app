@@ -27,9 +27,9 @@ export class DocumentsService {
         type: AttributeFilterType.Document,
       })
       .pipe(take(1))
-      .subscribe((names) => {
+      .subscribe((page) => {
         this._store.update({
-          attributes: names,
+          attributes: page.items,
         });
       });
   }

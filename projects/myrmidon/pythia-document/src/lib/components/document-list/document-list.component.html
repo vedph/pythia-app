@@ -1,1 +1,93 @@
-<p>document-list works!</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title> Documents </mat-card-title>
+  </mat-card-header>
+  <mat-card-content
+    gdAreas="spinner spinner | filters list | . paginator"
+    gdAreas.lt-md="spinner | list | paginator | filters"
+    gdColumns="280px 1fr"
+    gdColumns.lt-md="1fr"
+    gdGap="8px"
+  >
+    <!-- spinner -->
+    <div
+      *ngIf="paginator.isLoading$ | async"
+      gdArea="spinner"
+      gdAlignColumns="center"
+      gdAlignRows="center"
+    >
+      <mat-spinner [diameter]="48" [strokeWidth]="4"></mat-spinner>
+    </div>
+
+    <!-- filters -->
+    <div gdArea="filters" gdAlignRows.lt-md="center">
+      <mat-card>
+        <mat-card-content>
+          <pythia-document-filter
+            [disabled]="(paginator.isLoading$ | async) === true"
+          ></pythia-document-filter>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- list -->
+    <div gdArea="list" *ngIf="pagination$ | async as pagination">
+      <table>
+        <thead>
+          <th></th>
+          <th></th>
+          <th>id</th>
+          <th>author</th>
+          <th>title</th>
+          <th>date</th>
+          <th fxHide.lt-md>profile</th>
+          <th fxHide.lt-md>source</th>
+          <th fxHide.lt-md>last modified</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of pagination.data">
+            <td class="command">
+              <button
+                mat-icon-button
+                type="button"
+                matTooltip="Read this document"
+                color="primary"
+              >
+                <mat-icon>auto_stories</mat-icon>
+              </button>
+            </td>
+            <td class="command">
+              <button
+                mat-icon-button
+                type="button"
+                matTooltip="View document info"
+              >
+                <mat-icon>info</mat-icon>
+              </button>
+            </td>
+            <td>{{ d.id }}</td>
+            <td>{{ d.author }}</td>
+            <td>{{ d.title }}</td>
+            <td>{{ d.dateValue }}</td>
+            <td fxHide.lt-md>{{ d.profileId }}</td>
+            <td fxHide.lt-md>{{ d.source }}</td>
+            <td fxHide.lt-md>{{ d.lastModified | date: "short" }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- pagination -->
+      <mat-paginator
+        gdArea="pagination"
+        gdAlignColumns="center"
+        gdAlignRows="start"
+        [length]="pagination.total"
+        [pageSize]="pageSize?.value"
+        [pageSizeOptions]="[20, 50, 75, 100]"
+        [pageIndex]="pagination.currentPage - 1"
+        [showFirstLastButtons]="true"
+        (page)="pageChanged($event)"
+      ></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

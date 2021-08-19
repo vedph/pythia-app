@@ -68,7 +68,7 @@
   <!-- date -->
   <div>
     <!-- minDateValue -->
-    <mat-form-field>
+    <mat-form-field style="width: 80px;">
       <input
         matInput
         type="number"
@@ -78,7 +78,7 @@
     </mat-form-field>
     &nbsp;-&nbsp;
     <!-- maxDateValue -->
-    <mat-form-field>
+    <mat-form-field style="width: 80px;">
       <input
         matInput
         type="number"
@@ -91,7 +91,7 @@
   <!-- time -->
   <div>
     <!-- minTimeModified -->
-    <mat-form-field>
+    <mat-form-field style="width: 130px;">
       <input
         matInput
         type="date"
@@ -100,7 +100,7 @@
       />
     </mat-form-field>
     &nbsp;-&nbsp;
-    <mat-form-field>
+    <mat-form-field style="width: 130px;">
       <input
         matInput
         type="date"
@@ -111,20 +111,20 @@
   </div>
 
   <!-- attributes -->
-  <div>
-    <h3>attributes</h3>
-    <div formArrayName="attributes" *ngIf="(attributes$ | async)?.length">
-      <div>
-        <button
-          type="button"
-          mat-icon-button
-          color="primary"
-          (click)="addAttribute()"
-        >
-          <mat-icon>add_circle</mat-icon>
-          add attribute
-        </button>
-      </div>
+  <div *ngIf="(attributes$ | async)?.length">
+    <h3>
+      attributes
+      <button
+        type="button"
+        mat-icon-button
+        color="primary"
+        matTooltip="Add an attribute filter"
+        (click)="addAttribute()"
+      >
+        <mat-icon>add_circle</mat-icon>
+      </button>
+    </h3>
+    <div formArrayName="attributes">
       <div
         *ngFor="
           let item of attributes.controls;
@@ -149,7 +149,7 @@
 
           <!-- child controls -->
           <!-- name -->
-          <mat-form-field style="width: 8em">
+          <mat-form-field style="width: 90px">
             <mat-select formControlName="name" placeholder="name">
               <mat-option *ngFor="let n of attributes$ | async" [value]="n">{{
                 n
@@ -166,8 +166,8 @@
           </mat-form-field>
 
           <!-- value -->
-          &nbsp;=&nbsp;
-          <mat-form-field style="width: 8em;">
+          &nbsp;
+          <mat-form-field style="width: 90px">
             <input matInput formControlName="value" placeholder="value" />
             <mat-error
               *ngIf="
@@ -209,7 +209,7 @@
     style="margin-bottom: 10px"
   >
     <button
-      mat-raised-button
+      mat-icon-button
       type="button"
       (click)="reset()"
       color="warn"
@@ -220,7 +220,7 @@
     </button>
     <button
       type="submit"
-      mat-raised-button
+      mat-icon-button
       color="primary"
       [disabled]="disabled"
       matTooltip="Apply filters"

@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EnvService, ErrorService } from '@myrmidon/pythia-core';
+import { DataPage, EnvService, ErrorService } from '@myrmidon/pythia-core';
 import { Observable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
@@ -33,7 +33,9 @@ export class AttributeService {
    * single page with all the attribute names at once.
    * @returns Page of names.
    */
-  public getAttributeNames(filter: AttributeFilter): Observable<string[]> {
+  public getAttributeNames(
+    filter: AttributeFilter
+  ): Observable<DataPage<string>> {
     let httpParams = new HttpParams();
     httpParams = httpParams.set('pageNumber', filter.pageNumber.toString());
     httpParams = httpParams.set('pageSize', filter.pageSize.toString());
@@ -44,7 +46,7 @@ export class AttributeService {
     }
 
     return this._http
-      .get<string[]>(this._env.get('apiUrl') + 'attributes', {
+      .get<DataPage<string>>(this._env.get('apiUrl') + 'attributes', {
         params: httpParams,
       })
       .pipe(retry(3), catchError(this._error.handleError));

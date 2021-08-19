@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -6,12 +6,16 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { DocumentFilter } from '@myrmidon/pythia-api';
-import { Attribute, Corpus, Profile } from '@myrmidon/pythia-core';
+import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
+import { DocumentFilter, DocumentService } from '@myrmidon/pythia-api';
+import { Attribute, Corpus, DataPage, Profile, Document } from '@myrmidon/pythia-core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { DOCUMENTS_PAGINATOR } from '../state/documents.paginator';
 
 import { DocumentsQuery } from '../state/documents.query';
 import { DocumentsService } from '../state/documents.service';
+import { DocumentsState } from '../state/documents.store';
 
 @Component({
   selector: 'pythia-document-filter',
@@ -42,9 +46,12 @@ export class DocumentFilterComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
+    @Inject(DOCUMENTS_PAGINATOR)
+    public paginator: PaginatorPlugin<DocumentsState>,
     private _formBuilder: FormBuilder,
     query: DocumentsQuery,
-    private _docsService: DocumentsService
+    private _docsService: DocumentsService,
+    private _docService: DocumentService
   ) {
     this.filter$ = query.selectFilter();
     this.attributes$ = query.selectAttributes();
@@ -111,7 +118,7 @@ export class DocumentFilterComponent implements OnInit {
     this.minTimeModified.setValue(filter.minTimeModified);
     this.maxTimeModified.setValue(filter.maxTimeModified);
     this.sortOrder.setValue(filter.sortOrder || 0);
-    this.descending.setValue(filter.descending? true : false);
+    this.descending.setValue(filter.descending ? true : false);
 
     this.attributes.reset();
     const attrs = this.parseAttributes(filter.attributes);
@@ -196,11 +203,40 @@ export class DocumentFilterComponent implements OnInit {
     this.apply();
   }
 
+  private getRequest(
+    filter: DocumentFilter
+  ): () => Observable<PaginationResponse<Document>> {
+    return () =>
+      this._docService.getDocuments(filter).pipe(
+        // adapt server results to the paginator plugin
+        map((p: DataPage<Document>) => {
+          return {
+            currentPage: p.pageNumber,
+            perPage: p.pageSize,
+            lastPage: p.pageCount,
+            data: p.items,
+            total: p.total,
+          };
+        })
+      );
+  }
+
   public apply(): void {
     if (this.form.invalid) {
       return;
     }
     const filter = this.getFilter();
+
+    // update filter in state
     this._docsService.updateFilter(filter);
+
+    // filter changed, clear paginator's cache
+    this.paginator.clearCache();
+    // update the page
+    const request = this.getRequest(filter);
+    this.paginator.getPage(request);
+
+    // the new filter becomes part of paginator's metadata
+    this.paginator.metadata.set('filter', filter);
   }
 }

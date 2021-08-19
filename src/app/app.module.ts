@@ -13,6 +13,7 @@ import { PythiaApiModule } from 'projects/myrmidon/pythia-api/src/public-api';
 import { EnvServiceProvider } from '@myrmidon/pythia-core';
 import { AuthInterceptor } from '@myrmidon/pythia-api';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
+import { PythiaDocumentModule } from 'projects/myrmidon/pythia-document/src/public-api';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -29,6 +30,7 @@ import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
     PythiaCoreModule,
     PythiaMaterialModule,
     PythiaApiModule,
+    PythiaDocumentModule
   ],
   providers: [
     EnvServiceProvider,
