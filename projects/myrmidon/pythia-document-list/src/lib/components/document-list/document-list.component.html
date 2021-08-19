@@ -52,6 +52,7 @@
                 type="button"
                 matTooltip="Read this document"
                 color="primary"
+                (click)="requestRead(d)"
               >
                 <mat-icon>auto_stories</mat-icon>
               </button>
@@ -87,7 +88,7 @@
         [pageSizeOptions]="[20, 50, 75, 100]"
         [pageIndex]="pagination.currentPage - 1"
         [showFirstLastButtons]="true"
-        (page)="pageChanged($event)"
+        (page)="pageChange($event)"
       ></mat-paginator>
 
       <!-- info -->

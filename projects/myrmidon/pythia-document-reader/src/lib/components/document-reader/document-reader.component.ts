@@ -1,5 +1,5 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { ReaderService } from '@myrmidon/pythia-api';
 import { Document, TextMapNode } from '@myrmidon/pythia-core';
@@ -20,6 +20,20 @@ export interface DocumentReadRequest {
 })
 export class DocumentReaderComponent implements OnInit {
   private _busy: boolean | undefined;
+  private _request: DocumentReadRequest | undefined;
+
+  @Input()
+  public get request(): DocumentReadRequest | undefined {
+    return this._request;
+  }
+  public set request(value: DocumentReadRequest | undefined) {
+    this._request = value;
+    if (value) {
+      this._drService.load(value);
+    } else {
+      this._drService.reset();
+    }
+  }
 
   public loading$: Observable<boolean>;
   public document$: Observable<Document | undefined>;

@@ -22,6 +22,10 @@ export class DocumentReaderService {
     }
   }
 
+  public reset(): void {
+    this._store.reset();
+  }
+
   /**
    * Load the requested document with its map.
    *

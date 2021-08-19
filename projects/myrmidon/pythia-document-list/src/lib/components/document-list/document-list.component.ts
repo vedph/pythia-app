@@ -1,9 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
 import { DocumentFilter, DocumentService } from '@myrmidon/pythia-api';
 import { DataPage, deepCopy, Document } from '@myrmidon/pythia-core';
+import { DocumentReadRequest } from '@myrmidon/pythia-document-reader';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, startWith, switchMap, tap } from 'rxjs/operators';
 import { DOCUMENTS_PAGINATOR } from '../state/documents.paginator';
@@ -23,6 +24,9 @@ export class DocumentListComponent implements OnInit {
   public pageSize: FormControl;
   public selectedDocument: Document | undefined;
 
+  @Output()
+  public readRequest: EventEmitter<DocumentReadRequest>;
+
   constructor(
     @Inject(DOCUMENTS_PAGINATOR)
     public paginator: PaginatorPlugin<DocumentsState>,
@@ -30,6 +34,8 @@ export class DocumentListComponent implements OnInit {
     docsQuery: DocumentsQuery,
     formBuilder: FormBuilder
   ) {
+    this.readRequest = new EventEmitter<DocumentReadRequest>();
+
     this.pageSize = formBuilder.control(20);
     this._refresh$ = new BehaviorSubject(0);
     this._filter$ = docsQuery.selectFilter();
@@ -91,7 +97,7 @@ export class DocumentListComponent implements OnInit {
       );
   }
 
-  public pageChanged(event: PageEvent): void {
+  public pageChange(event: PageEvent): void {
     // https://material.angular.io/components/paginator/api
     this.paginator.setPage(event.pageIndex + 1);
     if (event.pageSize !== this.pageSize.value) {
@@ -103,6 +109,10 @@ export class DocumentListComponent implements OnInit {
 
   public refresh(): void {
     this._refresh$.next(this._refresh$.value + 1);
+  }
+
+  public requestRead(document: Document): void {
+    this.readRequest.emit({ documentId: document.id });
   }
 
   public showInfo(document: Document): void {
