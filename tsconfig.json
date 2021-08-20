@@ -43,6 +43,10 @@
         "dist/myrmidon/pythia-material/myrmidon-pythia-material",
         "dist/myrmidon/pythia-material"
       ],
+      "@myrmidon/pythia-stats": [
+        "dist/myrmidon/pythia-stats/myrmidon-pythia-stats",
+        "dist/myrmidon/pythia-stats"
+      ],
       "@myrmidon/pythia-term-list": [
         "dist/myrmidon/pythia-term-list/myrmidon-pythia-term-list",
         "dist/myrmidon/pythia-term-list"

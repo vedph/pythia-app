@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ErrorService, EnvService } from '@myrmidon/pythia-core';
 import { Observable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+
+import { ErrorService, EnvService } from '@myrmidon/pythia-core';
 
 @Injectable({
   providedIn: 'root',

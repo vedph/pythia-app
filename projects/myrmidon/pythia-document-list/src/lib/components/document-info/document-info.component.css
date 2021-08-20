@@ -14,4 +14,7 @@ fieldset {
 td:nth-child(1) {
   color: gray;
   background-color: #f8f8f8;
+  padding: 0 8px;
+  border-spacing: 0 8px;
+  border-collapse: separate;
 }
