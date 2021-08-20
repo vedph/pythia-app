@@ -7,9 +7,10 @@ import { EnvServiceProvider, PythiaCoreModule } from '@myrmidon/pythia-core';
 import { PythiaMaterialModule } from '@myrmidon/pythia-material';
 import { PythiaUiModule } from '@myrmidon/pythia-ui';
 import { CorpusFilterComponent } from './components/corpus-filter/corpus-filter.component';
+import { CorpusListComponent } from './components/corpus-list/corpus-list.component';
 
 @NgModule({
-  declarations: [CorpusFilterComponent],
+  declarations: [CorpusFilterComponent, CorpusListComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -20,7 +21,7 @@ import { CorpusFilterComponent } from './components/corpus-filter/corpus-filter.
     PythiaMaterialModule,
     PythiaUiModule,
   ],
-  exports: [CorpusFilterComponent],
+  exports: [CorpusFilterComponent, CorpusListComponent],
   providers: [EnvServiceProvider],
 })
 export class PythiaCorpusListModule {}

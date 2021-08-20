@@ -1,15 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { CorpusFilter, CorpusService } from '@myrmidon/pythia-api';
-import { Attribute, Corpus, Profile } from '@myrmidon/pythia-core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
+
+import { CorpusFilter } from '@myrmidon/pythia-api';
+
 import { CorporaQuery } from '../state/corpora.query';
+import { CorporaService } from '../state/corpora.service';
 
 @Component({
   selector: 'pythia-corpus-filter',
@@ -29,7 +25,7 @@ export class CorpusFilterComponent implements OnInit {
   constructor(
     formBuilder: FormBuilder,
     query: CorporaQuery,
-    private _corpusService: CorpusService
+    private _corporaService: CorporaService
   ) {
     this.filter$ = query.selectFilter();
 
@@ -42,7 +38,39 @@ export class CorpusFilterComponent implements OnInit {
     });
   }
 
-  // TODO
+  ngOnInit(): void {
+    this.filter$.subscribe((f) => {
+      this.updateForm(f);
+    });
+  }
 
-  ngOnInit(): void {}
+  private updateForm(filter: CorpusFilter): void {
+    this.id.setValue(filter.id);
+    this.title.setValue(filter.title);
+    this.form.markAsPristine();
+  }
+
+  public reset(): void {
+    this.form.reset();
+    this.apply();
+  }
+
+  private getFilter(): CorpusFilter {
+    return {
+      pageNumber: 1, // not used
+      pageSize: 20, // not used
+      id: this.id.value?.trim(),
+      title: this.title.value?.trim(),
+    };
+  }
+
+  public apply(): void {
+    if (this.form.invalid) {
+      return;
+    }
+    const filter = this.getFilter();
+
+    // update filter in state
+    this._corporaService.updateFilter(filter);
+  }
 }

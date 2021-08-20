@@ -1,46 +1,39 @@
-import { Component, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, startWith, switchMap, tap } from 'rxjs/operators';
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
 
-import { DocumentFilter, DocumentService } from '@myrmidon/pythia-api';
-import { DataPage, deepCopy, Document } from '@myrmidon/pythia-core';
-import { DocumentReadRequest } from '@myrmidon/pythia-document-reader';
+import { CorpusFilter, CorpusService } from '@myrmidon/pythia-api';
+import { Corpus, DataPage } from '@myrmidon/pythia-core';
 
-import { DOCUMENTS_PAGINATOR } from '../state/documents.paginator';
-import { DocumentsQuery } from '../state/documents.query';
-import { DocumentsState } from '../state/documents.store';
+import { CorporaState } from '../state/corpora.store';
+import { CorporaQuery } from '../state/corpora.query';
+import { CORPORA_PAGINATOR } from '../state/corpora.paginator';
 
 @Component({
-  selector: 'pythia-document-list',
-  templateUrl: './document-list.component.html',
-  styleUrls: ['./document-list.component.css'],
+  selector: 'pythia-corpus-list',
+  templateUrl: './corpus-list.component.html',
+  styleUrls: ['./corpus-list.component.css'],
 })
-export class DocumentListComponent {
+export class CorpusListComponent {
   private _refresh$: BehaviorSubject<number>;
-  private _filter$: Observable<DocumentFilter>;
+  private _filter$: Observable<CorpusFilter>;
 
-  public pagination$: Observable<PaginationResponse<Document>>;
+  public pagination$: Observable<PaginationResponse<Corpus>>;
   public pageSize: FormControl;
-  public selectedDocument: Document | undefined;
-
-  @Output()
-  public readRequest: EventEmitter<DocumentReadRequest>;
 
   constructor(
-    @Inject(DOCUMENTS_PAGINATOR)
-    public paginator: PaginatorPlugin<DocumentsState>,
-    private _docService: DocumentService,
-    docsQuery: DocumentsQuery,
+    @Inject(CORPORA_PAGINATOR)
+    public paginator: PaginatorPlugin<CorporaState>,
+    corporaQuery: CorporaQuery,
+    private _corpusService: CorpusService,
     formBuilder: FormBuilder
   ) {
-    this.readRequest = new EventEmitter<DocumentReadRequest>();
-
     this.pageSize = formBuilder.control(20);
     this._refresh$ = new BehaviorSubject(0);
-    this._filter$ = docsQuery.selectFilter();
+    this._filter$ = corporaQuery.selectFilter();
 
     this.pagination$ = combineLatest([
       this.paginator.pageChanges,
@@ -82,12 +75,12 @@ export class DocumentListComponent {
   }
 
   private getRequest(
-    filter: DocumentFilter
-  ): () => Observable<PaginationResponse<Document>> {
+    filter: CorpusFilter
+  ): () => Observable<PaginationResponse<Corpus>> {
     return () =>
-      this._docService.getDocuments(filter).pipe(
+      this._corpusService.getCorpora(filter).pipe(
         // adapt server results to the paginator plugin
-        map((p: DataPage<Document>) => {
+        map((p: DataPage<Corpus>) => {
           return {
             currentPage: p.pageNumber,
             perPage: p.pageSize,
@@ -109,13 +102,5 @@ export class DocumentListComponent {
 
   public refresh(): void {
     this._refresh$.next(this._refresh$.value + 1);
-  }
-
-  public requestRead(document: Document): void {
-    this.readRequest.emit({ documentId: document.id });
-  }
-
-  public showInfo(document: Document): void {
-    this.selectedDocument = deepCopy(document);
   }
 }
