@@ -22,6 +22,14 @@ const routes: Routes = [
       ),
     // canActivate: [AuthGuardService]
   },
+  {
+    path: 'documents/:id',
+    loadChildren: () =>
+      import('@myrmidon/pythia-document-reader-page').then(
+        (module) => module.PythiaDocumentReaderPageModule
+      ),
+    // canActivate: [AuthGuardService]
+  },
   { path: '**', component: HomeComponent },
 ];
 

@@ -413,6 +413,37 @@
           }
         }
       }
+    },
+    "@myrmidon/pythia-document-reader-page": {
+      "projectType": "library",
+      "root": "projects/myrmidon/pythia-document-reader-page",
+      "sourceRoot": "projects/myrmidon/pythia-document-reader-page/src",
+      "prefix": "pythia",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/pythia-document-reader-page/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/pythia-document-reader-page/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/pythia-document-reader-page/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/pythia-document-reader-page/src/test.ts",
+            "tsConfig": "projects/myrmidon/pythia-document-reader-page/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/pythia-document-reader-page/karma.conf.js"
+          }
+        }
+      }
     }
   },
   "defaultProject": "pythia"
