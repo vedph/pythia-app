@@ -6,12 +6,11 @@
       /></span>
       <a mat-button routerLink="/home">Pythia</a>
 
-      <!-- <button mat-button [matMenuTriggerFor]="refsMenu">Refs</button>
-      <mat-menu #refsMenu>
-        <a mat-menu-item routerLink="/refs/doc-references">Doc references</a>
-        <a mat-menu-item routerLink="/refs/external-ids">External IDs</a>
-        <a mat-menu-item routerLink="/refs/decorated-ids">Decorated IDs</a>
-      </mat-menu> -->
+      <button mat-button [matMenuTriggerFor]="corpusMenu">Corpus</button>
+      <mat-menu #corpusMenu>
+        <a mat-menu-item routerLink="/documents">Documents</a>
+        <a mat-menu-item routerLink="/corpora">Corpora</a>
+      </mat-menu>
     </mat-toolbar>
   </header>
 
@@ -22,7 +21,7 @@
   <footer>
     <div class="footer-container">
       <div class="info">
-        Cadmus by
+        Pythia by
         <a href="https://www.fusisoft.net" target="_blank">Daniele Fusi</a> at
         <a href="https://www.unive.it/pag/39287" target="_blank">VeDPH</a>
       </div>

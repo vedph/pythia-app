@@ -12,9 +12,10 @@ import { HomeComponent } from './components/home/home.component';
 
 import { PythiaApiModule, AuthInterceptor } from 'projects/myrmidon/pythia-api/src/public-api';
 import { PythiaCoreModule, EnvServiceProvider } from 'projects/myrmidon/pythia-core/src/public-api';
-import { PythiaDocumentListModule } from 'projects/myrmidon/pythia-document-list/src/public-api';
 import { PythiaMaterialModule } from 'projects/myrmidon/pythia-material/src/public-api';
-import { PythiaDocumentReaderModule } from 'projects/myrmidon/pythia-document-reader/src/public-api';
+import { PythiaUiModule } from '@myrmidon/pythia-ui';
+// import { PythiaDocumentListModule } from 'projects/myrmidon/pythia-document-list/src/public-api';
+// import { PythiaDocumentReaderModule } from 'projects/myrmidon/pythia-document-reader/src/public-api';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -31,8 +32,7 @@ import { PythiaDocumentReaderModule } from 'projects/myrmidon/pythia-document-re
     PythiaCoreModule,
     PythiaMaterialModule,
     PythiaApiModule,
-    PythiaDocumentListModule,
-    PythiaDocumentReaderModule
+    PythiaUiModule
   ],
   providers: [
     EnvServiceProvider,

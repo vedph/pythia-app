@@ -15,6 +15,10 @@
         "dist/myrmidon/pythia-corpus-list/myrmidon-pythia-corpus-list",
         "dist/myrmidon/pythia-corpus-list"
       ],
+      "@myrmidon/pythia-corpus-list-page": [
+        "dist/myrmidon/pythia-corpus-list-page/myrmidon-pythia-corpus-list-page",
+        "dist/myrmidon/pythia-corpus-list-page"
+      ],
       "@myrmidon/pythia-document": [
         "dist/myrmidon/pythia-document/myrmidon-pythia-document",
         "dist/myrmidon/pythia-document"
@@ -22,6 +26,10 @@
       "@myrmidon/pythia-document-list": [
         "dist/myrmidon/pythia-document-list/myrmidon-pythia-document-list",
         "dist/myrmidon/pythia-document-list"
+      ],
+      "@myrmidon/pythia-document-list-page": [
+        "dist/myrmidon/pythia-document-list-page/myrmidon-pythia-document-list-page",
+        "dist/myrmidon/pythia-document-list-page"
       ],
       "@myrmidon/pythia-document-reader": [
         "dist/myrmidon/pythia-document-reader/myrmidon-pythia-document-reader",

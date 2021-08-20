@@ -351,6 +351,68 @@
           }
         }
       }
+    },
+    "@myrmidon/pythia-corpus-list-page": {
+      "projectType": "library",
+      "root": "projects/myrmidon/pythia-corpus-list-page",
+      "sourceRoot": "projects/myrmidon/pythia-corpus-list-page/src",
+      "prefix": "pythia",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/pythia-corpus-list-page/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/pythia-corpus-list-page/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/pythia-corpus-list-page/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/pythia-corpus-list-page/src/test.ts",
+            "tsConfig": "projects/myrmidon/pythia-corpus-list-page/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/pythia-corpus-list-page/karma.conf.js"
+          }
+        }
+      }
+    },
+    "@myrmidon/pythia-document-list-page": {
+      "projectType": "library",
+      "root": "projects/myrmidon/pythia-document-list-page",
+      "sourceRoot": "projects/myrmidon/pythia-document-list-page/src",
+      "prefix": "pythia",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/pythia-document-list-page/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/pythia-document-list-page/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/pythia-document-list-page/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/pythia-document-list-page/src/test.ts",
+            "tsConfig": "projects/myrmidon/pythia-document-list-page/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/pythia-document-list-page/karma.conf.js"
+          }
+        }
+      }
     }
   },
   "defaultProject": "pythia"

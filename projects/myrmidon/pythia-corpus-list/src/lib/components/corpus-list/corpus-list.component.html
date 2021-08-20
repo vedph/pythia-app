@@ -1,87 +1,82 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title> Corpora </mat-card-title>
-  </mat-card-header>
-  <mat-card-content
-    gdAreas="spinner spinner | filters list | . paginator | . editor"
-    gdAreas.lt-md="spinner | list | paginator | editor | filters"
-    gdColumns="200px 1fr"
-    gdColumns.lt-md="1fr"
-    gdGap="8px"
+<div
+  gdAreas="spinner spinner | filters list | . paginator | . editor"
+  gdAreas.lt-md="spinner | list | paginator | editor | filters"
+  gdColumns="200px 1fr"
+  gdColumns.lt-md="1fr"
+  gdGap="8px"
+>
+  <!-- spinner -->
+  <div
+    *ngIf="paginator.isLoading$ | async"
+    gdArea="spinner"
+    gdAlignColumns="center"
+    gdAlignRows="center"
   >
-    <!-- spinner -->
-    <div
-      *ngIf="paginator.isLoading$ | async"
-      gdArea="spinner"
+    <mat-spinner [diameter]="48" [strokeWidth]="4"></mat-spinner>
+  </div>
+
+  <!-- filters -->
+  <div gdArea="filters" gdAlignRows.lt-md="center">
+    <mat-card>
+      <mat-card-content>
+        <pythia-corpus-filter
+          [disabled]="(paginator.isLoading$ | async) === true"
+        ></pythia-corpus-filter>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- list -->
+  <div gdArea="list" *ngIf="pagination$ | async as pagination">
+    <table>
+      <thead>
+        <th></th>
+        <th></th>
+        <th>id</th>
+        <th>title</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d of pagination.data">
+          <td class="command">
+            <button
+              mat-icon-button
+              type="button"
+              matTooltip="Edit this corpus"
+              color="primary"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+          <td class="command">
+            <button
+              mat-icon-button
+              type="button"
+              matTooltip="Delete this corpus"
+              color="warn"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+          <td>{{ d.id }}</td>
+          <td>{{ d.title }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- pagination -->
+    <mat-paginator
+      gdArea="pagination"
       gdAlignColumns="center"
-      gdAlignRows="center"
-    >
-      <mat-spinner [diameter]="48" [strokeWidth]="4"></mat-spinner>
-    </div>
+      gdAlignRows="start"
+      [length]="pagination.total"
+      [pageSize]="pageSize?.value"
+      [pageSizeOptions]="[20, 50, 75, 100]"
+      [pageIndex]="pagination.currentPage - 1"
+      [showFirstLastButtons]="true"
+      (page)="pageChange($event)"
+    ></mat-paginator>
 
-    <!-- filters -->
-    <div gdArea="filters" gdAlignRows.lt-md="center">
-      <mat-card>
-        <mat-card-content>
-          <pythia-corpus-filter
-            [disabled]="(paginator.isLoading$ | async) === true"
-          ></pythia-corpus-filter>
-        </mat-card-content>
-      </mat-card>
-    </div>
-
-    <!-- list -->
-    <div gdArea="list" *ngIf="pagination$ | async as pagination">
-      <table>
-        <thead>
-          <th></th>
-          <th></th>
-          <th>id</th>
-          <th>title</th>
-        </thead>
-        <tbody>
-          <tr *ngFor="let d of pagination.data">
-            <td class="command">
-              <button
-                mat-icon-button
-                type="button"
-                matTooltip="Edit this corpus"
-                color="primary"
-              >
-                <mat-icon>edit</mat-icon>
-              </button>
-            </td>
-            <td class="command">
-              <button
-                mat-icon-button
-                type="button"
-                matTooltip="Delete this corpus"
-                color="warn"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
-            </td>
-            <td>{{ d.id }}</td>
-            <td>{{ d.title }}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- pagination -->
-      <mat-paginator
-        gdArea="pagination"
-        gdAlignColumns="center"
-        gdAlignRows="start"
-        [length]="pagination.total"
-        [pageSize]="pageSize?.value"
-        [pageSizeOptions]="[20, 50, 75, 100]"
-        [pageIndex]="pagination.currentPage - 1"
-        [showFirstLastButtons]="true"
-        (page)="pageChange($event)"
-      ></mat-paginator>
-
-      <!-- editor -->
-      <div gdArea="editor">TODO</div>
-    </div>
-  </mat-card-content>
-</mat-card>
+    <!-- editor -->
+    <div gdArea="editor">TODO</div>
+  </div>
+</div>
