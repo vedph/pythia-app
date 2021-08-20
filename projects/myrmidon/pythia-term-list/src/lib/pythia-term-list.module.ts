@@ -8,9 +8,10 @@ import { PythiaMaterialModule } from '@myrmidon/pythia-material';
 import { PythiaUiModule } from '@myrmidon/pythia-ui';
 
 import { TermFilterComponent } from './components/term-filter/term-filter.component';
+import { TermListComponent } from './components/term-list/term-list.component';
 
 @NgModule({
-  declarations: [TermFilterComponent],
+  declarations: [TermFilterComponent, TermListComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -19,9 +20,9 @@ import { TermFilterComponent } from './components/term-filter/term-filter.compon
     PythiaApiModule,
     PythiaCoreModule,
     PythiaMaterialModule,
-    PythiaUiModule
+    PythiaUiModule,
   ],
-  exports: [TermFilterComponent],
+  exports: [TermFilterComponent, TermListComponent],
   providers: [EnvServiceProvider],
 })
 export class PythiaTermListModule {}

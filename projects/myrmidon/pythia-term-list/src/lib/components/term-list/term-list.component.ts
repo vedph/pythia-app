@@ -1,44 +1,38 @@
-import { Component, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { PageEvent } from '@angular/material/paginator';
-import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
-import { DocumentFilter, DocumentService } from '@myrmidon/pythia-api';
-import { DataPage, deepCopy, Document } from '@myrmidon/pythia-core';
-import { DocumentReadRequest } from '@myrmidon/pythia-document-reader';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
+
+import { TermFilter, TermService } from '@myrmidon/pythia-api';
+import { TERMS_PAGINATOR } from '../state/terms.paginator';
+import { TermsState } from '../state/terms.store';
+import { TermsQuery } from '../state/terms.query';
 import { map, startWith, switchMap, tap } from 'rxjs/operators';
-import { DOCUMENTS_PAGINATOR } from '../state/documents.paginator';
-import { DocumentsQuery } from '../state/documents.query';
-import { DocumentsState } from '../state/documents.store';
+import { DataPage, IndexTerm } from '@myrmidon/pythia-core';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-  selector: 'pythia-document-list',
-  templateUrl: './document-list.component.html',
-  styleUrls: ['./document-list.component.css'],
+  selector: 'pythia-term-list',
+  templateUrl: './term-list.component.html',
+  styleUrls: ['./term-list.component.css'],
 })
-export class DocumentListComponent {
+export class TermListComponent {
   private _refresh$: BehaviorSubject<number>;
-  private _filter$: Observable<DocumentFilter>;
+  private _filter$: Observable<TermFilter>;
 
-  public pagination$: Observable<PaginationResponse<Document>>;
+  public pagination$: Observable<PaginationResponse<IndexTerm>>;
   public pageSize: FormControl;
-  public selectedDocument: Document | undefined;
-
-  @Output()
-  public readRequest: EventEmitter<DocumentReadRequest>;
 
   constructor(
-    @Inject(DOCUMENTS_PAGINATOR)
-    public paginator: PaginatorPlugin<DocumentsState>,
-    private _docService: DocumentService,
-    docsQuery: DocumentsQuery,
+    @Inject(TERMS_PAGINATOR)
+    public paginator: PaginatorPlugin<TermsState>,
+    private _termService: TermService,
+    termsQuery: TermsQuery,
     formBuilder: FormBuilder
   ) {
-    this.readRequest = new EventEmitter<DocumentReadRequest>();
-
     this.pageSize = formBuilder.control(20);
     this._refresh$ = new BehaviorSubject(0);
-    this._filter$ = docsQuery.selectFilter();
+    this._filter$ = termsQuery.selectFilter();
 
     this.pagination$ = combineLatest([
       this.paginator.pageChanges,
@@ -80,12 +74,12 @@ export class DocumentListComponent {
   }
 
   private getRequest(
-    filter: DocumentFilter
-  ): () => Observable<PaginationResponse<Document>> {
+    filter: TermFilter
+  ): () => Observable<PaginationResponse<IndexTerm>> {
     return () =>
-      this._docService.getDocuments(filter).pipe(
+      this._termService.getTerms(filter).pipe(
         // adapt server results to the paginator plugin
-        map((p: DataPage<Document>) => {
+        map((p: DataPage<IndexTerm>) => {
           return {
             currentPage: p.pageNumber,
             perPage: p.pageSize,
@@ -107,13 +101,5 @@ export class DocumentListComponent {
 
   public refresh(): void {
     this._refresh$.next(this._refresh$.value + 1);
-  }
-
-  public requestRead(document: Document): void {
-    this.readRequest.emit({ documentId: document.id });
-  }
-
-  public showInfo(document: Document): void {
-    this.selectedDocument = deepCopy(document);
   }
 }
