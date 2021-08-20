@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { IndexTerm } from '@myrmidon/pythia-core';
 import { TermFilter } from '@myrmidon/pythia-api';
 
-export interface TermsState extends EntityState<IndexTerm, number> {
+export interface TermsState extends EntityState<IndexTerm> {
   filter: TermFilter;
   docAttributes: string[];
   tokAttributes: string[];

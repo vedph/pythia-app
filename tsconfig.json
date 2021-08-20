@@ -11,6 +11,10 @@
         "dist/myrmidon/pythia-core/myrmidon-pythia-core",
         "dist/myrmidon/pythia-core"
       ],
+      "@myrmidon/pythia-corpus-list": [
+        "dist/myrmidon/pythia-corpus-list/myrmidon-pythia-corpus-list",
+        "dist/myrmidon/pythia-corpus-list"
+      ],
       "@myrmidon/pythia-document": [
         "dist/myrmidon/pythia-document/myrmidon-pythia-document",
         "dist/myrmidon/pythia-document"

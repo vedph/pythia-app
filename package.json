@@ -11,7 +11,8 @@
     "build-api": "ng build @myrmidon/pythia-api",
     "build-doc-list": "ng build @myrmidon/pythia-document-list",
     "build-doc-reader": "ng build @myrmidon/pythia-document-reader",
-    "build-term-list": "ng build @myrmidon/pythia-term-list"
+    "build-term-list": "ng build @myrmidon/pythia-term-list",
+    "build-corpus-list": "ng build @myrmidon/pythia-corpus-list"
   },
   "private": true,
   "dependencies": {
