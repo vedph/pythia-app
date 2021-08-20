@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { DocumentReadRequest } from '@myrmidon/pythia-document-reader';
 
 @Component({
-  selector: 'pythia-pythia-document-list-page',
+  selector: 'pythia-document-list-page',
   templateUrl: './pythia-document-list-page.component.html',
   styleUrls: ['./pythia-document-list-page.component.css'],
 })

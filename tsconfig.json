@@ -47,6 +47,10 @@
         "dist/myrmidon/pythia-term-list/myrmidon-pythia-term-list",
         "dist/myrmidon/pythia-term-list"
       ],
+      "@myrmidon/pythia-term-list-page": [
+        "dist/myrmidon/pythia-term-list-page/myrmidon-pythia-term-list-page",
+        "dist/myrmidon/pythia-term-list-page"
+      ],
       "@myrmidon/pythia-ui": [
         "dist/myrmidon/pythia-ui/myrmidon-pythia-ui",
         "dist/myrmidon/pythia-ui"

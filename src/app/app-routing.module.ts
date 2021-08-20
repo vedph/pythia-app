@@ -30,6 +30,14 @@ const routes: Routes = [
       ),
     // canActivate: [AuthGuardService]
   },
+  {
+    path: 'terms',
+    loadChildren: () =>
+      import('@myrmidon/pythia-term-list-page').then(
+        (module) => module.PythiaTermListPageModule
+      ),
+    // canActivate: [AuthGuardService]
+  },
   { path: '**', component: HomeComponent },
 ];
 
