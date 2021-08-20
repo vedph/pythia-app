@@ -7,16 +7,10 @@ import { EnvServiceProvider, PythiaCoreModule } from '@myrmidon/pythia-core';
 import { PythiaMaterialModule } from '@myrmidon/pythia-material';
 import { PythiaUiModule } from '@myrmidon/pythia-ui';
 
-import { DocumentFilterComponent } from './components/document-filter/document-filter.component';
-import { DocumentInfoComponent } from './components/document-info/document-info.component';
-import { DocumentListComponent } from './components/document-list/document-list.component';
+import { TermFilterComponent } from './components/term-filter/term-filter.component';
 
 @NgModule({
-  declarations: [
-    DocumentFilterComponent,
-    DocumentInfoComponent,
-    DocumentListComponent,
-  ],
+  declarations: [TermFilterComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -27,11 +21,7 @@ import { DocumentListComponent } from './components/document-list/document-list.
     PythiaMaterialModule,
     PythiaUiModule
   ],
-  exports: [
-    DocumentFilterComponent,
-    DocumentInfoComponent,
-    DocumentListComponent,
-  ],
+  exports: [TermFilterComponent],
   providers: [EnvServiceProvider],
 })
-export class PythiaDocumentListModule {}
+export class PythiaTermListModule {}

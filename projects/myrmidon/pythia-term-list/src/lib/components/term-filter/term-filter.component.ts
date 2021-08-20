@@ -6,26 +6,27 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { DocumentFilter } from '@myrmidon/pythia-api';
+import { TermFilter } from '@myrmidon/pythia-api';
 import { Attribute, Corpus, Profile } from '@myrmidon/pythia-core';
 import { Observable } from 'rxjs';
 
-import { DocumentsQuery } from '../state/documents.query';
-import { DocumentsService } from '../state/documents.service';
+import { TermsQuery } from '../state/terms.query';
+import { TermsService } from '../state/terms.service';
 
 @Component({
-  selector: 'pythia-document-filter',
-  templateUrl: './document-filter.component.html',
-  styleUrls: ['./document-filter.component.css'],
+  selector: 'pythia-term-filter',
+  templateUrl: './term-filter.component.html',
+  styleUrls: ['./term-filter.component.css'],
 })
-export class DocumentFilterComponent implements OnInit {
+export class TermFilterComponent implements OnInit {
   @Input()
   public disabled: boolean | undefined;
   @Input()
   public sortable: boolean | undefined;
 
-  public filter$: Observable<DocumentFilter>;
-  public attributes$: Observable<string[]>;
+  public filter$: Observable<TermFilter>;
+  public docAttributes$: Observable<string[]>;
+  public tokAttributes$: Observable<string[]>;
 
   public corpus: FormControl;
   public author: FormControl;
@@ -36,18 +37,23 @@ export class DocumentFilterComponent implements OnInit {
   public maxDateValue: FormControl;
   public minTimeModified: FormControl;
   public maxTimeModified: FormControl;
-  public attributes: FormArray;
+  public docAttributes: FormArray;
+  public tokAttributes: FormArray;
+  public valuePattern: FormControl;
+  public minCount: FormControl;
+  public maxCount: FormControl;
   public sortOrder: FormControl;
   public descending: FormControl;
   public form: FormGroup;
 
   constructor(
     private _formBuilder: FormBuilder,
-    query: DocumentsQuery,
-    private _docsService: DocumentsService
+    query: TermsQuery,
+    private _termsService: TermsService
   ) {
     this.filter$ = query.selectFilter();
-    this.attributes$ = query.selectAttributes();
+    this.docAttributes$ = query.selectDocAttributes();
+    this.tokAttributes$ = query.selectTokAttributes();
     this.sortable = true;
 
     // form
@@ -60,7 +66,11 @@ export class DocumentFilterComponent implements OnInit {
     this.maxDateValue = _formBuilder.control(null);
     this.minTimeModified = _formBuilder.control(null);
     this.maxTimeModified = _formBuilder.control(null);
-    this.attributes = _formBuilder.array([]);
+    this.docAttributes = _formBuilder.array([]);
+    this.tokAttributes = _formBuilder.array([]);
+    this.valuePattern = _formBuilder.control(null);
+    this.minCount = _formBuilder.control(0);
+    this.maxCount = _formBuilder.control(0);
     this.sortOrder = _formBuilder.control(0);
     this.descending = _formBuilder.control(false);
     this.form = _formBuilder.group({
@@ -73,14 +83,18 @@ export class DocumentFilterComponent implements OnInit {
       maxDateValue: this.maxDateValue,
       minTimeModified: this.minTimeModified,
       maxTimeModified: this.maxTimeModified,
-      attributes: this.attributes,
+      docAttributes: this.docAttributes,
+      tokAttributes: this.tokAttributes,
+      valuePattern: this.valuePattern,
+      minCount: this.minCount,
+      maxCount: this.maxCount,
       sortOrder: this.sortOrder,
       descending: this.descending,
     });
   }
 
   ngOnInit(): void {
-    this._docsService.loadLookup();
+    this._termsService.loadLookup();
     this.filter$.subscribe((f) => {
       this.updateForm(f);
     });
@@ -100,7 +114,19 @@ export class DocumentFilterComponent implements OnInit {
       .filter((a) => a) as Attribute[];
   }
 
-  private updateForm(filter: DocumentFilter): void {
+  private updateAttributes(csv: string | undefined, token: boolean): void {
+    const attributes: FormArray = token
+      ? this.tokAttributes
+      : this.docAttributes;
+
+    attributes.reset();
+    const attrs = this.parseAttributes(csv);
+    for (let i = 0; i < attrs.length; i++) {
+      attributes.push(this.getAttributeGroup(attrs[i]));
+    }
+  }
+
+  private updateForm(filter: TermFilter): void {
     this.corpus.setValue(filter.corpusId);
     this.author.setValue(filter.author);
     this.title.setValue(filter.title);
@@ -110,14 +136,14 @@ export class DocumentFilterComponent implements OnInit {
     this.maxDateValue.setValue(filter.maxDateValue);
     this.minTimeModified.setValue(filter.minTimeModified);
     this.maxTimeModified.setValue(filter.maxTimeModified);
+    this.valuePattern.setValue(filter.valuePattern);
+    this.minCount.setValue(filter.minCount);
+    this.maxCount.setValue(filter.maxCount);
     this.sortOrder.setValue(filter.sortOrder || 0);
     this.descending.setValue(filter.descending ? true : false);
 
-    this.attributes.reset();
-    const attrs = this.parseAttributes(filter.attributes);
-    for (let i = 0; i < attrs.length; i++) {
-      this.attributes.push(this.getAttributeGroup(attrs[i]));
-    }
+    this.updateAttributes(filter.docAttributes, false);
+    this.updateAttributes(filter.tokAttributes, true);
 
     this.form.markAsPristine();
   }
@@ -146,20 +172,32 @@ export class DocumentFilterComponent implements OnInit {
     });
   }
 
-  public addAttribute(item?: Attribute): void {
-    this.attributes.push(this.getAttributeGroup(item));
-    this.attributes.markAsDirty();
+  public addAttribute(item: Attribute | undefined, token: boolean): void {
+    const attributes: FormArray = token
+      ? this.tokAttributes
+      : this.docAttributes;
+
+    attributes.push(this.getAttributeGroup(item));
+    attributes.markAsDirty();
   }
 
-  public removeAttribute(index: number): void {
-    this.attributes.removeAt(index);
-    this.attributes.markAsDirty();
+  public removeAttribute(index: number, token: boolean): void {
+    const attributes: FormArray = token
+      ? this.tokAttributes
+      : this.docAttributes;
+
+    attributes.removeAt(index);
+    attributes.markAsDirty();
   }
 
-  private getAttributes(): Attribute[] | undefined {
+  private getAttributes(token: boolean): Attribute[] | undefined {
+    const attributes: FormArray = token
+      ? this.tokAttributes
+      : this.docAttributes;
+
     const entries: Attribute[] = [];
-    for (let i = 0; i < this.attributes.length; i++) {
-      const g = this.attributes.at(i) as FormGroup;
+    for (let i = 0; i < attributes.length; i++) {
+      const g = attributes.at(i) as FormGroup;
       entries.push({
         targetId: 0, // not used
         name: g.controls.name.value?.trim(),
@@ -170,7 +208,7 @@ export class DocumentFilterComponent implements OnInit {
   }
   //#endregion
 
-  private getFilter(): DocumentFilter {
+  private getFilter(): TermFilter {
     return {
       pageNumber: 1, // not used
       pageSize: 20, // not used
@@ -183,9 +221,15 @@ export class DocumentFilterComponent implements OnInit {
       maxDateValue: this.maxDateValue.value,
       minTimeModified: this.minTimeModified.value,
       maxTimeModified: this.maxTimeModified.value,
-      attributes: this.getAttributes()
+      docAttributes: this.getAttributes(false)
         ?.map((a) => `${a.name}=${a.value}`)
         ?.join(','),
+      tokAttributes: this.getAttributes(true)
+        ?.map((a) => `${a.name}=${a.value}`)
+        ?.join(','),
+      valuePattern: this.valuePattern.value,
+      minCount: this.minCount.value,
+      maxCount: this.maxCount.value,
       sortOrder: this.sortOrder.value,
       descending: this.descending.value ? true : false,
     };
@@ -203,6 +247,6 @@ export class DocumentFilterComponent implements OnInit {
     const filter = this.getFilter();
 
     // update filter in state
-    this._docsService.updateFilter(filter);
+    this._termsService.updateFilter(filter);
   }
 }

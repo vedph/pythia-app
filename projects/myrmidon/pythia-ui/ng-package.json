@@ -4,6 +4,7 @@
   "lib": {
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
+      "@myrmidon/pythia-api": "@myrmidon/pythia-api",
       "@myrmidon/pythia-material": "@myrmidon/pythia-material"
     }
   }

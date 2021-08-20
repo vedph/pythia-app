@@ -8,7 +8,7 @@ export interface DocumentsState extends EntityState<Document, number> {
   attributes: string[];
 }
 
-const initialState = {
+const initialState : DocumentsState = {
   filter: {
     pageNumber: 1,
     pageSize: 20,

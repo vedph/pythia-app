@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { CorpusService } from '@myrmidon/pythia-api';
-import { Corpus } from '@myrmidon/pythia-core';
 import { Observable, of } from 'rxjs';
 import {
   debounceTime,
@@ -10,28 +8,34 @@ import {
   switchMap,
 } from 'rxjs/operators';
 
+import { ProfileService } from '@myrmidon/pythia-api';
+import { Profile } from '@myrmidon/pythia-core';
+
 @Component({
-  selector: 'pythia-lookup-corpus',
-  templateUrl: './lookup-corpus.component.html',
-  styleUrls: ['./lookup-corpus.component.css'],
+  selector: 'pythia-lookup-profile',
+  templateUrl: './lookup-profile.component.html',
+  styleUrls: ['./lookup-profile.component.css'],
 })
-export class LookupCorpusComponent implements OnInit {
+export class LookupProfileComponent implements OnInit {
   @Input()
   public label: string | undefined;
   @Input()
   public limit: number;
 
   @Output()
-  public itemChange: EventEmitter<Corpus | null>;
+  public itemChange: EventEmitter<Profile | null>;
 
   public form: FormGroup;
   public lookup: FormControl;
-  public items$: Observable<Corpus[]>;
-  public item: Corpus | undefined;
+  public items$: Observable<Profile[]>;
+  public item: Profile | undefined;
 
-  constructor(formBuilder: FormBuilder, private _corpusService: CorpusService) {
+  constructor(
+    formBuilder: FormBuilder,
+    private _profileService: ProfileService
+  ) {
     // events
-    this.itemChange = new EventEmitter<Corpus | null>();
+    this.itemChange = new EventEmitter<Profile | null>();
     // form
     this.lookup = formBuilder.control(null);
     this.form = formBuilder.group({
@@ -42,13 +46,13 @@ export class LookupCorpusComponent implements OnInit {
     this.items$ = this.lookup.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((value: Corpus | string) => {
+      switchMap((value: Profile | string) => {
         if (typeof value === 'string') {
-          return this._corpusService
-            .getCorpora({
+          return this._profileService
+            .getProfiles({
               pageNumber: 1,
               pageSize: this.limit || 10,
-              title: value,
+              id: value,
             })
             .pipe(
               map((page) => {
@@ -64,8 +68,8 @@ export class LookupCorpusComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  public getLookupName(item: Corpus): string {
-    return item?.title;
+  public getLookupName(item: Profile): string {
+    return item?.id;
   }
 
   public clear(): void {
@@ -74,7 +78,7 @@ export class LookupCorpusComponent implements OnInit {
     this.itemChange.emit(null);
   }
 
-  public pickItem(item: Corpus): void {
+  public pickItem(item: Profile): void {
     this.item = item;
     this.itemChange.emit(item);
   }

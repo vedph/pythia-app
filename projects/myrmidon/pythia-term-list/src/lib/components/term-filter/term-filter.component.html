@@ -68,7 +68,7 @@
   <!-- date -->
   <div>
     <!-- minDateValue -->
-    <mat-form-field style="width: 80px;">
+    <mat-form-field style="width: 80px">
       <input
         matInput
         type="number"
@@ -78,7 +78,7 @@
     </mat-form-field>
     &nbsp;-&nbsp;
     <!-- maxDateValue -->
-    <mat-form-field style="width: 80px;">
+    <mat-form-field style="width: 80px">
       <input
         matInput
         type="number"
@@ -91,7 +91,7 @@
   <!-- time -->
   <div>
     <!-- minTimeModified -->
-    <mat-form-field style="width: 130px;">
+    <mat-form-field style="width: 130px">
       <input
         matInput
         type="date"
@@ -100,7 +100,7 @@
       />
     </mat-form-field>
     &nbsp;-&nbsp;
-    <mat-form-field style="width: 130px;">
+    <mat-form-field style="width: 130px">
       <input
         matInput
         type="date"
@@ -110,24 +110,24 @@
     </mat-form-field>
   </div>
 
-  <!-- attributes -->
-  <div *ngIf="(attributes$ | async)?.length">
+  <!-- doc attributes -->
+  <div *ngIf="(docAttributes$ | async)?.length">
     <h3>
-      attributes
+      document attributes
       <button
         type="button"
         mat-icon-button
         color="primary"
-        matTooltip="Add an attribute filter"
-        (click)="addAttribute()"
+        matTooltip="Add a document attribute filter"
+        (click)="addAttribute(undefined, false)"
       >
         <mat-icon>add_circle</mat-icon>
       </button>
     </h3>
-    <div formArrayName="attributes">
+    <div formArrayName="docAttributes">
       <div
         *ngFor="
-          let item of attributes.controls;
+          let item of docAttributes.controls;
           let i = index;
           let first = first;
           let last = last
@@ -142,7 +142,7 @@
             type="button"
             matTooltip="Remove this attribute"
             color="warn"
-            (click)="removeAttribute(i)"
+            (click)="removeAttribute(i, false)"
           >
             <mat-icon>remove_circle</mat-icon>
           </button>
@@ -151,9 +151,11 @@
           <!-- name -->
           <mat-form-field style="width: 90px">
             <mat-select formControlName="name" placeholder="name">
-              <mat-option *ngFor="let n of attributes$ | async" [value]="n">{{
-                n
-              }}</mat-option>
+              <mat-option
+                *ngFor="let n of docAttributes$ | async"
+                [value]="n"
+                >{{ n }}</mat-option
+              >
             </mat-select>
             <mat-error
               *ngIf="
@@ -183,6 +185,115 @@
     </div>
   </div>
 
+  <!-- tok attributes -->
+  <div *ngIf="(tokAttributes$ | async)?.length">
+    <h3>
+      token attributes
+      <button
+        type="button"
+        mat-icon-button
+        color="primary"
+        matTooltip="Add a token attribute filter"
+        (click)="addAttribute(undefined, true)"
+      >
+        <mat-icon>add_circle</mat-icon>
+      </button>
+    </h3>
+    <div formArrayName="tokAttributes">
+      <div
+        *ngFor="
+          let item of tokAttributes.controls;
+          let i = index;
+          let first = first;
+          let last = last
+        "
+      >
+        <!-- child form -->
+        <div [formGroupName]="i">
+          <!-- child actions -->
+          {{ i + 1 }}.
+          <button
+            mat-icon-button
+            type="button"
+            matTooltip="Remove this attribute"
+            color="warn"
+            (click)="removeAttribute(i, true)"
+          >
+            <mat-icon>remove_circle</mat-icon>
+          </button>
+
+          <!-- child controls -->
+          <!-- name -->
+          <mat-form-field style="width: 90px">
+            <mat-select formControlName="name" placeholder="name">
+              <mat-option
+                *ngFor="let n of tokAttributes$ | async"
+                [value]="n"
+                >{{ n }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="
+                $any(item)['controls'].name.errors?.required &&
+                ($any(item)['controls'].name.dirty ||
+                  $any(item)['controls'].name.touched)
+              "
+              >name required</mat-error
+            >
+          </mat-form-field>
+
+          <!-- value -->
+          &nbsp;
+          <mat-form-field style="width: 90px">
+            <input matInput formControlName="value" placeholder="value" />
+            <mat-error
+              *ngIf="
+                $any(item)['controls'].value.errors?.maxLength &&
+                ($any(item)['controls'].value.dirty ||
+                  $any(item)['controls'].value.touched)
+              "
+              >too long</mat-error
+            >
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- valuePattern -->
+  <div>
+    <mat-form-field>
+      <input
+        matInput
+        [formControl]="valuePattern"
+        placeholder="value (wildcards: ? *)"
+      />
+    </mat-form-field>
+  </div>
+
+  <!-- count -->
+  <div>
+    <mat-form-field style="width: 4em">
+      <input
+        matInput
+        type="number"
+        min="0"
+        [formControl]="minCount"
+        placeholder="min.frq."
+      />
+    </mat-form-field>
+    &nbsp;-&nbsp;
+    <mat-form-field style="width: 4em">
+      <input
+        matInput
+        type="number"
+        min="0"
+        [formControl]="maxCount"
+        placeholder="max.frq."
+      />
+    </mat-form-field>
+  </div>
+
   <!-- sort -->
   <div *ngIf="sortable">
     <h3>sort order</h3>
@@ -190,9 +301,9 @@
       <mat-form-field>
         <mat-select [formControl]="sortOrder" placeholder="sort">
           <mat-option [value]="0">default</mat-option>
-          <mat-option [value]="1">author</mat-option>
-          <mat-option [value]="2">title</mat-option>
-          <mat-option [value]="3">date</mat-option>
+          <mat-option [value]="1">by value</mat-option>
+          <mat-option [value]="2">by reversed value</mat-option>
+          <mat-option [value]="3">by count</mat-option>
         </mat-select>
       </mat-form-field>
       <!-- sort descending -->
