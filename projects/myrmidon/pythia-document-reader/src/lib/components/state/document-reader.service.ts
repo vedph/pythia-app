@@ -46,6 +46,32 @@ export class DocumentReaderService {
           this._store.update({
             document: d,
           });
+
+          // load map
+          this._readService
+            .getDocumentMap(request.documentId)
+            .pipe(take(1))
+            .subscribe(
+              (node: TextMapNode) => {
+                this.setNodeParents(node);
+                this._store.update({
+                  map: node,
+                });
+              },
+              (error) => {
+                if (error) {
+                  console.error(JSON.stringify(error));
+                }
+                this._store.setError<string>(
+                  'Unable to load map for document ' + request.documentId
+                );
+              }
+            );
+
+          // load text if required
+          if (request.end) {
+            this.loadTextFromRange(request.start!, request.end);
+          }
         },
         (error) => {
           if (error) {
@@ -56,32 +82,6 @@ export class DocumentReaderService {
           );
         }
       );
-
-    // load map
-    this._readService
-      .getDocumentMap(request.documentId)
-      .pipe(take(1))
-      .subscribe(
-        (node: TextMapNode) => {
-          this.setNodeParents(node);
-          this._store.update({
-            map: node,
-          });
-        },
-        (error) => {
-          if (error) {
-            console.error(JSON.stringify(error));
-          }
-          this._store.setError<string>(
-            'Unable to load map for document ' + request.documentId
-          );
-        }
-      );
-
-    // load text if required
-    if (request.end) {
-      this.loadTextFromRange(request.start!, request.end);
-    }
   }
 
   /**
