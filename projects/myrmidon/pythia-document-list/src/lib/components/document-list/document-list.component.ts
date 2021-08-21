@@ -1,4 +1,4 @@
-import { Component, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, Inject, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -24,7 +24,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './document-list.component.html',
   styleUrls: ['./document-list.component.css'],
 })
-export class DocumentListComponent {
+export class DocumentListComponent implements OnDestroy {
   private _refresh$: BehaviorSubject<number>;
   private _filter$: Observable<DocumentFilter>;
 
@@ -87,6 +87,10 @@ export class DocumentListComponent {
         return this.paginator.getPage(request);
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.paginator.destroy();
   }
 
   private getRequest(

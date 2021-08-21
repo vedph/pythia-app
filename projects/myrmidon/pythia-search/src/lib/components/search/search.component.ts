@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -24,16 +24,17 @@ import { KwicSearchResultEntity, SearchState } from '../state/search.store';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   public pagination$: Observable<PaginationResponse<KwicSearchResultEntity>>;
   public query$: Observable<string | undefined>;
+  public loading$: Observable<boolean | undefined>;
+  public readRequest$: Observable<DocumentReadRequest | undefined>;
   public pageSize: FormControl;
   public query: FormControl;
   public form: FormGroup;
   public busy: boolean | undefined;
   public leftContextLabels: string[];
   public rightContextLabels: string[];
-  public readRequest: DocumentReadRequest | undefined;
 
   constructor(
     @Inject(SEARCH_PAGINATOR)
@@ -57,7 +58,10 @@ export class SearchComponent implements OnInit {
     this.rightContextLabels = ['1', '2', '3', '4', '5'];
 
     this.query$ = _searchQuery.selectQuery();
+    this.loading$ = _searchQuery.selectLoading();
+    this.readRequest$ = _searchQuery.selectReadRequest();
 
+    // https://datorama.github.io/akita/docs/plugins/pagination/
     this.pagination$ = combineLatest([
       this.paginator.pageChanges,
       this.pageSize.valueChanges.pipe(
@@ -70,7 +74,6 @@ export class SearchComponent implements OnInit {
         })
       ),
       this.query$.pipe(
-        // filter((q) => q!.length > 0),
         // clear the cache when query changes
         tap((_) => {
           this.paginator.clearCache();
@@ -78,7 +81,12 @@ export class SearchComponent implements OnInit {
       ),
     ]).pipe(
       filter(([pageNumber, pageSize, query]) => {
-        return pageNumber > 0 && pageSize > 0 && query!.length > 0;
+        return (
+          pageNumber > 0 &&
+          pageSize > 0 &&
+          query !== undefined &&
+          query.length > 0
+        );
       }),
       // for each emitted value, combine into a filter and use it
       // to request the page from server
@@ -96,13 +104,20 @@ export class SearchComponent implements OnInit {
     );
   }
 
+  ngOnDestroy(): void {
+    this.paginator.destroy();
+  }
+
   private getRequest(
     search: Search
   ): () => Observable<PaginationResponse<KwicSearchResultEntity>> {
-    return () =>
-      this._searchService.search(search).pipe(
+    return () => {
+      this.busy =true;
+
+      return this._searchService.search(search).pipe(
         // adapt server results to the paginator plugin
         map((w: ResultWrapper<DataPage<KwicSearchResult>>) => {
+          this.busy = false;
           if (w.error) {
             this._searchStateService.updateError(w.error);
             return {
@@ -131,6 +146,7 @@ export class SearchComponent implements OnInit {
           };
         })
       );
+    };
   }
 
   public pageChange(event: PageEvent): void {
@@ -151,16 +167,16 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {}
 
   public readDocument(id: number) {
-    this.readRequest = {
+    this._searchStateService.updateReadRequest({
       documentId: id,
-    };
+    });
   }
 
   public readDocumentPiece(id: number, start: number, length: number) {
-    this.readRequest = {
+    this._searchStateService.updateReadRequest({
       documentId: id,
       start: start,
       end: start + length,
-    };
+    });
   }
 }

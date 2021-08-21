@@ -6,7 +6,7 @@ import {
   DataPage,
   ResultWrapper,
 } from '@myrmidon/pythia-core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
 export interface SearchResult {
@@ -53,6 +53,20 @@ export class SearchService {
   public search(
     search: Search
   ): Observable<ResultWrapper<DataPage<KwicSearchResult>>> {
+    // empty result set for invalid search parameters
+    if (search.pageNumber < 1 || search.pageSize < 1 || !search.query) {
+      const w: ResultWrapper<DataPage<KwicSearchResult>> = {
+        value: {
+          items: [],
+          pageNumber: search.pageNumber,
+          pageSize: search.pageSize,
+          pageCount: 0,
+          total: 0,
+        },
+      };
+      return of(w);
+    }
+
     return this._http
       .post<ResultWrapper<DataPage<KwicSearchResult>>>(
         this._env.get('apiUrl') + 'search',

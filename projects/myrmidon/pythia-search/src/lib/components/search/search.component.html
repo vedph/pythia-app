@@ -1,11 +1,11 @@
 <div
   gdAreas="query | results | paginator | reader"
-  gdRows="200px 1fr 80px 1fr"
+  gdRows="130px 1fr 80px 1fr"
   gdGap="8px"
 >
   <!-- query -->
   <form gdArea="query" [formGroup]="form" (submit)="search()">
-    <mat-form-field style="width: 100%;">
+    <mat-form-field style="width: 100%">
       <textarea
         rows="3"
         matInput
@@ -25,6 +25,7 @@
       <button type="submit" mat-button>
         <mat-icon>search</mat-icon> search
       </button>
+      <mat-progress-bar mode="indeterminate" *ngIf="busy"></mat-progress-bar>
     </div>
   </form>
 
@@ -33,13 +34,13 @@
     <table>
       <thead>
         <tr>
-          <td></td>
-          <td></td>
-          <td>author</td>
-          <td>title</td>
-          <td *ngFor="let l of leftContextLabels">{{ l }}</td>
-          <td>value</td>
-          <td *ngFor="let l of rightContextLabels">{{ l }}</td>
+          <th></th>
+          <th></th>
+          <th>author</th>
+          <th>title</th>
+          <th *ngFor="let l of leftContextLabels">{{ l }}</th>
+          <th>value</th>
+          <th *ngFor="let l of rightContextLabels">{{ l }}</th>
         </tr>
       </thead>
       <tbody>
@@ -114,6 +115,8 @@
 
   <!-- reader -->
   <div gdArea="reader">
-    <pythia-document-reader [request]="readRequest"></pythia-document-reader>
+    <pythia-document-reader
+      [request]="$any(readRequest$ | async)"
+    ></pythia-document-reader>
   </div>
 </div>

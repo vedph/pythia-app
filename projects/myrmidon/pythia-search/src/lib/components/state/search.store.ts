@@ -1,7 +1,7 @@
 import { StoreConfig, EntityStore, EntityState } from '@datorama/akita';
 import { Injectable } from '@angular/core';
-import { Document } from '@myrmidon/pythia-core';
 import { KwicSearchResult } from '@myrmidon/pythia-api';
+import { DocumentReadRequest } from '@myrmidon/pythia-document-reader';
 
 export interface KwicSearchResultEntity extends KwicSearchResult {
   // ID for local store entities, built from document ID and position
@@ -15,6 +15,7 @@ export interface SearchState
   query?: string;
   queryHistory: string[];
   error?: string;
+  readRequest?: DocumentReadRequest
 }
 
 const initialState: SearchState = {

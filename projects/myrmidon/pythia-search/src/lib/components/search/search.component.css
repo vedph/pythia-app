@@ -3,17 +3,24 @@ table {
   width: 100%;
 }
 
+th {
+  font-weight: normal;
+}
+
 th, td {
   border: 1px solid #ddd;
-  padding: 8px;
+}
+
+th:nth-child(1), th:nth-child(2) {
+  border: none;
 }
 
 tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: #f8f8f8;
 }
 
 tr:hover {
-  background-color: #ddd;
+  background-color: #eee;
 }
 
 thead td {
@@ -28,10 +35,10 @@ tbody td {
   border-right: 1px solid silver;
 }
 
-tbody td.action {
+tbody td.command {
   padding: 0px;
-  width: 32px;
   border: none;
+  width: 32px;
 }
 
 tbody>tr>td>a {
@@ -42,6 +49,7 @@ tbody>tr>td>a {
 td.author {
   font-variant: small-caps;
   color: #c04f05;
+  font-size: 110%;
 }
 
 td.title {

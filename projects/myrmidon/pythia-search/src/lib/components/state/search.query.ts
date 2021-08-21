@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { QueryEntity } from '@datorama/akita';
+import { DocumentReadRequest } from '@myrmidon/pythia-document-reader';
 import { Observable } from 'rxjs';
 import { SearchStore, SearchState } from './search.store';
 
@@ -15,5 +16,9 @@ export class SearchQuery extends QueryEntity<SearchState> {
 
   public selectQueryHistory(): Observable<string[]> {
     return this.select((state) => state.queryHistory);
+  }
+
+  public selectReadRequest(): Observable<DocumentReadRequest | undefined> {
+    return this.select((state) => state.readRequest);
   }
 }

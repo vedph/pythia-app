@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -19,7 +19,7 @@ import { DialogService } from '@myrmidon/pythia-ui';
   templateUrl: './corpus-list.component.html',
   styleUrls: ['./corpus-list.component.css'],
 })
-export class CorpusListComponent {
+export class CorpusListComponent implements OnDestroy {
   private _refresh$: BehaviorSubject<number>;
   private _filter$: Observable<CorpusFilter>;
 
@@ -76,6 +76,10 @@ export class CorpusListComponent {
         return this.paginator.getPage(request);
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.paginator.destroy();
   }
 
   private getRequest(

@@ -4,6 +4,7 @@ import {
   AttributeService,
   DocumentFilter,
 } from '@myrmidon/pythia-api';
+import { DocumentReadRequest } from '@myrmidon/pythia-document-reader';
 import { take } from 'rxjs/operators';
 import { SearchStore } from './search.store';
 
@@ -48,6 +49,26 @@ export class SearchStateService {
   public updateError(error: string | undefined): void {
     this._store.update({
       error: error,
+    });
+  }
+
+  /**
+   * Update the read request.
+   * @param request The request.
+   */
+  public updateReadRequest(request: DocumentReadRequest | undefined): void {
+    this._store.update({
+      readRequest: request,
+    });
+  }
+
+  /**
+   * Update the loading flag. This is a property derived from EntityState.
+   * @param on True to set loading on, false to set it off.
+   */
+  public updateLoading(on: boolean): void {
+    this._store.update({
+      loading: on
     });
   }
 }
