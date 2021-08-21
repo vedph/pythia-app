@@ -1,0 +1,72 @@
+<form [formGroup]="form" (submit)="save()">
+  <h3>{{id}}</h3>
+
+  <!-- title -->
+  <mat-form-field>
+    <input matInput [formControl]="title" placeholder="title" />
+    <mat-error *ngIf="title.errors?.required && (title.dirty || title.touched)"
+      >title required</mat-error
+    >
+    <mat-error *ngIf="title.errors?.maxLength && (title.dirty || title.touched)"
+      >title too long</mat-error
+    >
+  </mat-form-field>
+
+  <!-- description -->
+  <mat-form-field>
+    <textarea
+      rows="3"
+      matInput
+      [formControl]="description"
+      placeholder="description"
+    ></textarea>
+    <mat-error
+      *ngIf="
+        description.errors?.maxLength &&
+        (description.dirty || description.touched)
+      "
+      >description too long</mat-error
+    >
+  </mat-form-field>
+
+  <!-- clone -->
+  <mat-checkbox [formControl]="clone">clone into</mat-checkbox>
+
+  <!-- newId -->
+  <ng-container *ngIf="clone?.value">
+    <mat-form-field>
+      <input matInput [formControl]="newId" placeholder="new ID" />
+      <mat-error
+        *ngIf="newId.errors?.required && (newId.dirty || newId.touched)"
+        >ID required</mat-error
+      >
+      <mat-error
+        *ngIf="newId.errors?.maxLength && (newId.dirty || newId.touched)"
+        >ID too long</mat-error
+      >
+    </mat-form-field>
+  </ng-container>
+
+  <!-- buttons -->
+  <div role="group" aria-label="toolbar" style="margin: 10px 0">
+    <button
+      mat-button
+      type="button"
+      (click)="close()"
+      color="warn"
+      matTooltip="Close"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+    &nbsp;
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="form.invalid"
+      matTooltip="Save"
+    >
+      <mat-icon>check_circle</mat-icon>
+    </button>
+  </div>
+</form>

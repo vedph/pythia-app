@@ -36,13 +36,14 @@
         <th>title</th>
       </thead>
       <tbody>
-        <tr *ngFor="let d of pagination.data">
+        <tr *ngFor="let c of pagination.data">
           <td class="command">
             <button
               mat-icon-button
               type="button"
               matTooltip="Edit this corpus"
               color="primary"
+              (click)="editCorpus(c)"
             >
               <mat-icon>edit</mat-icon>
             </button>
@@ -53,12 +54,13 @@
               type="button"
               matTooltip="Delete this corpus"
               color="warn"
+              (click)="deleteCorpus(c)"
             >
               <mat-icon>delete</mat-icon>
             </button>
           </td>
-          <td>{{ d.id }}</td>
-          <td>{{ d.title }}</td>
+          <td>{{ c.id }}</td>
+          <td>{{ c.title }}</td>
         </tr>
       </tbody>
     </table>
@@ -77,6 +79,17 @@
     ></mat-paginator>
 
     <!-- editor -->
-    <div gdArea="editor">TODO</div>
+    <div gdArea="editor">
+      <mat-card *ngIf="editedCorpus">
+        <mat-card-content>
+          <pythia-corpus-editor
+            [corpus]="editedCorpus"
+            (corpusChange)="onCorpusChange($event)"
+            (corpusClone)="onCorpusClone($event)"
+            (editorClose)="onCorpusEditorClose()"
+          ></pythia-corpus-editor>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
 </div>

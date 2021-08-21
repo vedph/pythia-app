@@ -11,6 +11,7 @@ import { Corpus, DataPage } from '@myrmidon/pythia-core';
 import { CorporaState } from '../state/corpora.store';
 import { CorporaQuery } from '../state/corpora.query';
 import { CORPORA_PAGINATOR } from '../state/corpora.paginator';
+import { CorpusCloneRequest } from '../corpus-editor/corpus-editor.component';
 
 @Component({
   selector: 'pythia-corpus-list',
@@ -23,6 +24,7 @@ export class CorpusListComponent {
 
   public pagination$: Observable<PaginationResponse<Corpus>>;
   public pageSize: FormControl;
+  public editedCorpus: Corpus | undefined;
 
   constructor(
     @Inject(CORPORA_PAGINATOR)
@@ -102,5 +104,25 @@ export class CorpusListComponent {
 
   public refresh(): void {
     this._refresh$.next(this._refresh$.value + 1);
+  }
+
+  public editCorpus(corpus: Corpus): void {
+    this.editedCorpus = { ...corpus };
+  }
+
+  public deleteCorpus(corpus: Corpus): void {
+    // TODO delete
+  }
+
+  public onCorpusChange(corpus: Corpus): void {
+    // TODO update
+  }
+
+  public onCorpusClone(request: CorpusCloneRequest): void {
+    // TODO clone
+  }
+
+  public onCorpusEditorClose(): void {
+    this.editedCorpus = undefined;
   }
 }
