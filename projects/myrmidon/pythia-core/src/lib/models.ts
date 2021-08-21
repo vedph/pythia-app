@@ -50,6 +50,7 @@ export interface Document {
 }
 
 export interface IndexTerm {
+  id: number;
   value: string;
   count: number;
 }
