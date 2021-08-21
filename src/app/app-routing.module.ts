@@ -38,6 +38,14 @@ const routes: Routes = [
       ),
     // canActivate: [AuthGuardService]
   },
+  {
+    path: 'search',
+    loadChildren: () =>
+      import('@myrmidon/pythia-search-page').then(
+        (module) => module.PythiaSearchPageModule
+      ),
+    // canActivate: [AuthGuardService]
+  },
   { path: '**', component: HomeComponent },
 ];
 

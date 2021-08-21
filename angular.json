@@ -506,6 +506,68 @@
           }
         }
       }
+    },
+    "@myrmidon/pythia-search": {
+      "projectType": "library",
+      "root": "projects/myrmidon/pythia-search",
+      "sourceRoot": "projects/myrmidon/pythia-search/src",
+      "prefix": "pythia",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/pythia-search/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/pythia-search/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/pythia-search/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/pythia-search/src/test.ts",
+            "tsConfig": "projects/myrmidon/pythia-search/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/pythia-search/karma.conf.js"
+          }
+        }
+      }
+    },
+    "@myrmidon/pythia-search-page": {
+      "projectType": "library",
+      "root": "projects/myrmidon/pythia-search-page",
+      "sourceRoot": "projects/myrmidon/pythia-search-page/src",
+      "prefix": "pythia",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/myrmidon/pythia-search-page/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/myrmidon/pythia-search-page/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/myrmidon/pythia-search-page/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myrmidon/pythia-search-page/src/test.ts",
+            "tsConfig": "projects/myrmidon/pythia-search-page/tsconfig.spec.json",
+            "karmaConfig": "projects/myrmidon/pythia-search-page/karma.conf.js"
+          }
+        }
+      }
     }
   },
   "defaultProject": "pythia"

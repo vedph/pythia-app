@@ -9,7 +9,7 @@ export interface DocumentReaderState {
 }
 
 @Injectable({ providedIn: 'root' })
-@StoreConfig({ name: 'DocumentReader' })
+@StoreConfig({ name: 'DocumentReader', resettable: true })
 export class DocumentReaderStore extends Store<DocumentReaderState> {
   constructor() {
     super({});

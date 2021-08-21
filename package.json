@@ -13,7 +13,8 @@
     "build-doc-reader": "ng build @myrmidon/pythia-document-reader && ng build @myrmidon/pythia-document-reader-page",
     "build-term-list": "ng build @myrmidon/pythia-term-list && ng build @myrmidon/pythia-term-list-page",
     "build-corpus-list": "ng build @myrmidon/pythia-corpus-list && ng build @myrmidon/pythia-corpus-list-page",
-    "build-lib": "npm run build-core && npm run build-api && npm run build-doc-list && npm run build-doc-reader && npm run build-term-list && npm run build-corpus-list"
+    "build-search": "ng build @myrmidon/pythia-search && ng build @myrmidon/pythia-search-page",
+    "build-lib": "npm run build-core && npm run build-api && npm run build-doc-list && npm run build-doc-reader && npm run build-term-list && npm run build-corpus-list && npm run build-search"
   },
   "private": true,
   "dependencies": {
