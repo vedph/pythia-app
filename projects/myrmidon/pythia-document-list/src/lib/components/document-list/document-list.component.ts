@@ -2,16 +2,22 @@ import { Component, Inject, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, startWith, switchMap, tap } from 'rxjs/operators';
+import { map, startWith, switchMap, take, tap } from 'rxjs/operators';
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
 
-import { DocumentFilter, DocumentService } from '@myrmidon/pythia-api';
+import {
+  CorpusService,
+  DocumentFilter,
+  DocumentService,
+} from '@myrmidon/pythia-api';
 import { DataPage, deepCopy, Document } from '@myrmidon/pythia-core';
 import { DocumentReadRequest } from '@myrmidon/pythia-document-reader';
 
 import { DOCUMENTS_PAGINATOR } from '../state/documents.paginator';
 import { DocumentsQuery } from '../state/documents.query';
 import { DocumentsState } from '../state/documents.store';
+import { CorpusActionRequest } from '../document-corpus/document-corpus.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'pythia-document-list',
@@ -33,14 +39,16 @@ export class DocumentListComponent {
     @Inject(DOCUMENTS_PAGINATOR)
     public paginator: PaginatorPlugin<DocumentsState>,
     private _docService: DocumentService,
-    docsQuery: DocumentsQuery,
+    private _corpusService: CorpusService,
+    private _docsQuery: DocumentsQuery,
+    private _snackbar: MatSnackBar,
     formBuilder: FormBuilder
   ) {
     this.readRequest = new EventEmitter<DocumentReadRequest>();
 
     this.pageSize = formBuilder.control(20);
     this._refresh$ = new BehaviorSubject(0);
-    this._filter$ = docsQuery.selectFilter();
+    this._filter$ = _docsQuery.selectFilter();
 
     this.pagination$ = combineLatest([
       this.paginator.pageChanges,
@@ -117,5 +125,49 @@ export class DocumentListComponent {
 
   public showInfo(document: Document): void {
     this.selectedDocument = deepCopy(document);
+  }
+
+  public onCorpusAction(request: CorpusActionRequest): void {
+    const filter = this._docsQuery.getValue().filter;
+    switch (request.action) {
+      case 'add-filtered':
+        this._corpusService
+          .addDocumentsByFilter(request.corpusId, filter)
+          .pipe(take(1))
+          .subscribe(
+            (_) => {
+              this._snackbar.open('Corpus updated', 'OK', {
+                duration: 2000,
+              });
+            },
+            (error) => {
+              console.error('Error adding documents by filter');
+              if (error) {
+                console.error(JSON.stringify(error));
+              }
+              this._snackbar.open('Error updating corpus', 'OK');
+            }
+          );
+        break;
+      case 'del-filtered':
+        this._corpusService
+          .removeDocumentsByFilter(request.corpusId, filter)
+          .pipe(take(1))
+          .subscribe(
+            (_) => {
+              this._snackbar.open('Corpus updated', 'OK', {
+                duration: 2000,
+              });
+            },
+            (error) => {
+              console.error('Error removing documents by filter');
+              if (error) {
+                console.error(JSON.stringify(error));
+              }
+              this._snackbar.open('Error updating corpus', 'OK');
+            }
+          );
+        break;
+    }
   }
 }

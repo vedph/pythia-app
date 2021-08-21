@@ -10,12 +10,14 @@ import { PythiaUiModule } from '@myrmidon/pythia-ui';
 import { DocumentFilterComponent } from './components/document-filter/document-filter.component';
 import { DocumentInfoComponent } from './components/document-info/document-info.component';
 import { DocumentListComponent } from './components/document-list/document-list.component';
+import { DocumentCorpusComponent } from './components/document-corpus/document-corpus.component';
 
 @NgModule({
   declarations: [
     DocumentFilterComponent,
     DocumentInfoComponent,
     DocumentListComponent,
+    DocumentCorpusComponent,
   ],
   imports: [
     CommonModule,

@@ -1,6 +1,6 @@
 <div
-  gdAreas="spinner spinner | filters list | . paginator | . info"
-  gdAreas.lt-md="spinner | list | paginator | info | filters"
+  gdAreas="spinner spinner | filters list | . paginator | . info | . corpus"
+  gdAreas.lt-md="spinner | list | paginator | info | filters | corpus"
   gdColumns="280px 1fr"
   gdColumns.lt-md="1fr"
   gdGap="8px"
@@ -92,6 +92,18 @@
       <pythia-document-info
         [document]="selectedDocument"
       ></pythia-document-info>
+    </div>
+
+    <!-- corpus -->
+    <div gdArea="corpus">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> corpus </mat-panel-title>
+        </mat-expansion-panel-header>
+        <pythia-document-corpus
+          (corpusAction)="onCorpusAction($event)"
+        ></pythia-document-corpus>
+      </mat-expansion-panel>
     </div>
   </div>
 </div>
