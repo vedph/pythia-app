@@ -78,11 +78,16 @@ export class CorpusService {
   /**
    * Add or update the specified corpus.
    * @param corpus The corpus.
+   * @param sourceId The optional corpus source ID to copy documents from.
    * @returns Observable with added corpus.
    */
-  public addCorpus(corpus: Corpus): Observable<Corpus> {
+  public addCorpus(corpus: Corpus, sourceId?: string): Observable<Corpus> {
+    const post = {
+      ...corpus,
+      sourceId: sourceId,
+    };
     return this._http
-      .post<Corpus>(this._env.get('apiUrl') + 'corpora', corpus)
+      .post<Corpus>(this._env.get('apiUrl') + 'corpora', post)
       .pipe(catchError(this._error.handleError));
   }
 

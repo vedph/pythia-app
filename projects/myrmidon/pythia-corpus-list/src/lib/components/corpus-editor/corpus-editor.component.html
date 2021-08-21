@@ -1,5 +1,5 @@
 <form [formGroup]="form" (submit)="save()">
-  <h3>{{id}}</h3>
+  <h3>{{ id }}</h3>
 
   <!-- title -->
   <mat-form-field>
@@ -29,23 +29,19 @@
     >
   </mat-form-field>
 
-  <!-- clone -->
-  <mat-checkbox [formControl]="clone">clone into</mat-checkbox>
-
-  <!-- newId -->
-  <ng-container *ngIf="clone?.value">
+  <!-- sourceId -->
+  <fieldset>
+    <legend>clone from</legend>
     <mat-form-field>
-      <input matInput [formControl]="newId" placeholder="new ID" />
+      <input matInput [formControl]="sourceId" placeholder="ID" />
       <mat-error
-        *ngIf="newId.errors?.required && (newId.dirty || newId.touched)"
-        >ID required</mat-error
-      >
-      <mat-error
-        *ngIf="newId.errors?.maxLength && (newId.dirty || newId.touched)"
+        *ngIf="
+          sourceId.errors?.maxLength && (sourceId.dirty || sourceId.touched)
+        "
         >ID too long</mat-error
       >
     </mat-form-field>
-  </ng-container>
+  </fieldset>
 
   <!-- buttons -->
   <div role="group" aria-label="toolbar" style="margin: 10px 0">

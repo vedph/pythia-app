@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, startWith, switchMap, tap } from 'rxjs/operators';
+import { map, startWith, switchMap, take, tap } from 'rxjs/operators';
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
 
 import { CorpusFilter, CorpusService } from '@myrmidon/pythia-api';
@@ -11,7 +11,8 @@ import { Corpus, DataPage } from '@myrmidon/pythia-core';
 import { CorporaState } from '../state/corpora.store';
 import { CorporaQuery } from '../state/corpora.query';
 import { CORPORA_PAGINATOR } from '../state/corpora.paginator';
-import { CorpusCloneRequest } from '../corpus-editor/corpus-editor.component';
+import { EditedCorpus } from '../corpus-editor/corpus-editor.component';
+import { DialogService } from '@myrmidon/pythia-ui';
 
 @Component({
   selector: 'pythia-corpus-list',
@@ -31,6 +32,7 @@ export class CorpusListComponent {
     public paginator: PaginatorPlugin<CorporaState>,
     corporaQuery: CorporaQuery,
     private _corpusService: CorpusService,
+    private _dialogService: DialogService,
     formBuilder: FormBuilder
   ) {
     this.pageSize = formBuilder.control(20);
@@ -111,15 +113,29 @@ export class CorpusListComponent {
   }
 
   public deleteCorpus(corpus: Corpus): void {
-    // TODO delete
+    this._dialogService
+      .confirm('Confirm', `Delete corpus ${corpus.title}?`)
+      .pipe(take(1))
+      .subscribe((yes) => {
+        if (!yes) {
+          return;
+        }
+        this._corpusService
+          .deleteCorpus(corpus.id)
+          .pipe(take(1))
+          .subscribe((_) => {
+            this._refresh$.next(this._refresh$.value + 1);
+          });
+      });
   }
 
-  public onCorpusChange(corpus: Corpus): void {
-    // TODO update
-  }
-
-  public onCorpusClone(request: CorpusCloneRequest): void {
-    // TODO clone
+  public onCorpusChange(corpus: EditedCorpus): void {
+    this._corpusService
+      .addCorpus(corpus, corpus.sourceId)
+      .pipe(take(1))
+      .subscribe((_) => {
+        this._refresh$.next(this._refresh$.value + 1);
+      });
   }
 
   public onCorpusEditorClose(): void {
