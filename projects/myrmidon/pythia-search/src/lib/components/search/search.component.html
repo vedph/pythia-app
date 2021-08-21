@@ -115,8 +115,12 @@
 
   <!-- reader -->
   <div gdArea="reader">
-    <pythia-document-reader
-      [request]="$any(readRequest$ | async)"
-    ></pythia-document-reader>
+    <mat-card>
+      <mat-card-content>
+        <pythia-document-reader
+          [request]="$any(readRequest$ | async)"
+        ></pythia-document-reader>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

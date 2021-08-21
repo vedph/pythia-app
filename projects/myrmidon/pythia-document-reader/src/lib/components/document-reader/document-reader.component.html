@@ -17,7 +17,7 @@
   </div>
 
   <!-- map -->
-  <div gdArea="map" *ngIf="map$ | async as map">
+  <div gdArea="map" *ngIf="map$ | async" class="map-area">
     <mat-tree
       [dataSource]="treeDataSource"
       [treeControl]="treeControl"

@@ -57,6 +57,9 @@ export class DocumentReaderComponent implements OnInit {
       return of(n.children || []);
     });
     this.treeDataSource = new MatTreeNestedDataSource();
+    this.map$.subscribe((root) => {
+      this.treeDataSource.data = root ? [root] : [];
+    });
   }
 
   public hasNestedChild = (index: number, node: TextMapNode) => {

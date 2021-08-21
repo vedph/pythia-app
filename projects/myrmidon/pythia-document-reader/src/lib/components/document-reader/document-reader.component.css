@@ -1,3 +1,8 @@
+.map-area {
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 0 8px;
+}
 .tree-invisible {
   display: none;
 }
