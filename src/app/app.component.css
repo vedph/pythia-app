@@ -23,3 +23,11 @@ footer {
 footer a {
   color: #808080;
 }
+
+.tb-fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.avatar {
+  margin: 0 16px;
+}

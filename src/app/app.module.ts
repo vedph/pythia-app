@@ -8,20 +8,34 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 
-import { HomeComponent } from './components/home/home.component';
+import { EnvServiceProvider } from '@myrmidon/ng-tools';
+import {
+  AuthJwtInterceptor,
+  AuthJwtLoginModule,
+} from '@myrmidon/auth-jwt-login';
+import { AuthJwtAdminModule } from '@myrmidon/auth-jwt-admin';
 
 import { PythiaApiModule } from 'projects/myrmidon/pythia-api/src/public-api';
 import { PythiaCoreModule } from 'projects/myrmidon/pythia-core/src/public-api';
 import { PythiaMaterialModule } from 'projects/myrmidon/pythia-material/src/public-api';
-import { PythiaUiModule } from '@myrmidon/pythia-ui';
 import { PythiaStatsModule } from 'projects/myrmidon/pythia-stats/src/public-api';
-import { EnvServiceProvider } from '@myrmidon/ng-tools';
-import { AuthJwtInterceptor } from '@myrmidon/auth-jwt-login';
-// import { PythiaDocumentListModule } from 'projects/myrmidon/pythia-document-list/src/public-api';
-// import { PythiaDocumentReaderModule } from 'projects/myrmidon/pythia-document-reader/src/public-api';
+import { PythiaUiModule } from 'projects/myrmidon/pythia-ui/src/public-api';
+
+import { HomeComponent } from './components/home/home.component';
+import { LoginPageComponent } from './components/login-page/login-page.component';
+import { ManageUsersPageComponent } from './components/manage-users-page/manage-users-page.component';
+import { RegisterUserPageComponent } from './components/register-user-page/register-user-page.component';
+import { ResetPasswordPageComponent } from './components/reset-password-page/reset-password-page.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    LoginPageComponent,
+    ManageUsersPageComponent,
+    RegisterUserPageComponent,
+    ResetPasswordPageComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -31,12 +45,15 @@ import { AuthJwtInterceptor } from '@myrmidon/auth-jwt-login';
     ReactiveFormsModule,
     // Akita
     AkitaNgDevtools.forRoot(),
+    // Auth
+    AuthJwtLoginModule,
+    AuthJwtAdminModule,
     // Pythia
     PythiaCoreModule,
     PythiaMaterialModule,
     PythiaApiModule,
     PythiaStatsModule,
-    PythiaUiModule
+    PythiaUiModule,
   ],
   providers: [
     EnvServiceProvider,

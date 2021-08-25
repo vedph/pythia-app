@@ -1,11 +1,20 @@
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule, Routes } from '@angular/router';
+
 import { HomeComponent } from './components/home/home.component';
+import { LoginPageComponent } from './components/login-page/login-page.component';
+import { ManageUsersPageComponent } from './components/manage-users-page/manage-users-page.component';
+import { RegisterUserPageComponent } from './components/register-user-page/register-user-page.component';
+import { ResetPasswordPageComponent } from './components/reset-password-page/reset-password-page.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginPageComponent },
+  { path: 'reset-password', component: ResetPasswordPageComponent },
+  { path: 'register-user', component: RegisterUserPageComponent },
+  { path: 'manage-users', component: ManageUsersPageComponent },
   {
     path: 'corpora',
     loadChildren: () =>

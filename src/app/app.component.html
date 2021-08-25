@@ -6,13 +6,69 @@
       /></span>
       <a mat-button routerLink="/home">Pythia</a>
 
+      <!-- corpus -->
       <button mat-button [matMenuTriggerFor]="corpusMenu">Corpus</button>
       <mat-menu #corpusMenu>
         <a mat-menu-item routerLink="/documents">Documents</a>
         <a mat-menu-item routerLink="/corpora">Corpora</a>
+      </mat-menu>
+
+      <!-- index -->
+      <button mat-button [matMenuTriggerFor]="indexMenu">Index</button>
+      <mat-menu #indexMenu>
         <a mat-menu-item routerLink="/terms">Terms</a>
         <a mat-menu-item routerLink="/search">Search</a>
       </mat-menu>
+      <span class="tb-fill-remaining-space"></span>
+
+      <div
+        *ngIf="user$ | async as user"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <img
+          class="avatar"
+          [src]="getGravatarUrl(user.email, 32)"
+          [alt]="user.userName"
+          [matTooltip]="user.userName"
+        />
+        <mat-icon
+          class="small-icon"
+          *ngIf="user.roles.includes('admin')"
+          title="admin"
+          >build</mat-icon
+        >
+        <mat-icon
+          class="small-icon"
+          *ngIf="!user.emailConfirmed"
+          title="You must verify your email address! Please check your mailbox {{
+            user.email
+          }}"
+          >feedback</mat-icon
+        >
+        <button mat-icon-button [mat-menu-trigger-for]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu x-position="before" #menu="matMenu">
+          <a
+            mat-menu-item
+            *ngIf="user.roles.includes('admin')"
+            routerLink="/register-user"
+            >Register user</a
+          >
+          <a
+            mat-menu-item
+            *ngIf="user.roles.includes('admin')"
+            routerLink="/manage-users"
+            >Manage users</a
+          >
+          <a mat-menu-item (click)="logout()">Logout</a>
+        </mat-menu>
+      </div>
+
+      <div *ngIf="!(user$ | async)">
+        <a mat-button routerLink="/login">Login</a>
+      </div>
     </mat-toolbar>
   </header>
 
