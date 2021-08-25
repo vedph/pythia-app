@@ -6,21 +6,23 @@
       /></span>
       <a mat-button routerLink="/home">Pythia</a>
 
-      <!-- corpus -->
-      <button mat-button [matMenuTriggerFor]="corpusMenu">Corpus</button>
-      <mat-menu #corpusMenu>
-        <a mat-menu-item routerLink="/documents">Documents</a>
-        <a mat-menu-item routerLink="/corpora">Corpora</a>
-      </mat-menu>
+      <ng-container *ngIf="user$ | async">
+        <!-- corpus -->
+        <button mat-button [matMenuTriggerFor]="corpusMenu">Corpus</button>
+        <mat-menu #corpusMenu>
+          <a mat-menu-item routerLink="/documents">Documents</a>
+          <a mat-menu-item routerLink="/corpora">Corpora</a>
+        </mat-menu>
 
-      <!-- index -->
-      <button mat-button [matMenuTriggerFor]="indexMenu">Index</button>
-      <mat-menu #indexMenu>
-        <a mat-menu-item routerLink="/terms">Terms</a>
-        <a mat-menu-item routerLink="/search">Search</a>
-      </mat-menu>
+        <!-- index -->
+        <button mat-button [matMenuTriggerFor]="indexMenu">Index</button>
+        <mat-menu #indexMenu>
+          <a mat-menu-item routerLink="/terms">Terms</a>
+          <a mat-menu-item routerLink="/search">Search</a>
+        </mat-menu>
+      </ng-container>
+
       <span class="tb-fill-remaining-space"></span>
-
       <div
         *ngIf="user$ | async as user"
         fxLayout="row"

@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule, Routes } from '@angular/router';
+import {
+  AuthJwtAdminGuardService,
+  AuthJwtGuardService,
+} from '@myrmidon/auth-jwt-login';
 
 import { HomeComponent } from './components/home/home.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
@@ -12,16 +16,28 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginPageComponent },
-  { path: 'reset-password', component: ResetPasswordPageComponent },
-  { path: 'register-user', component: RegisterUserPageComponent },
-  { path: 'manage-users', component: ManageUsersPageComponent },
+  {
+    path: 'reset-password',
+    component: ResetPasswordPageComponent,
+    canActivate: [AuthJwtGuardService],
+  },
+  {
+    path: 'register-user',
+    component: RegisterUserPageComponent,
+    canActivate: [AuthJwtAdminGuardService],
+  },
+  {
+    path: 'manage-users',
+    component: ManageUsersPageComponent,
+    canActivate: [AuthJwtAdminGuardService],
+  },
   {
     path: 'corpora',
     loadChildren: () =>
       import('@myrmidon/pythia-corpus-list-page').then(
         (module) => module.PythiaCorpusListPageModule
       ),
-    // canActivate: [AuthGuardService]
+    canActivate: [AuthJwtGuardService],
   },
   {
     path: 'documents',
@@ -29,7 +45,7 @@ const routes: Routes = [
       import('@myrmidon/pythia-document-list-page').then(
         (module) => module.PythiaDocumentListPageModule
       ),
-    // canActivate: [AuthGuardService]
+    canActivate: [AuthJwtGuardService],
   },
   {
     path: 'documents/:id',
@@ -37,7 +53,7 @@ const routes: Routes = [
       import('@myrmidon/pythia-document-reader-page').then(
         (module) => module.PythiaDocumentReaderPageModule
       ),
-    // canActivate: [AuthGuardService]
+    canActivate: [AuthJwtGuardService],
   },
   {
     path: 'terms',
@@ -45,7 +61,7 @@ const routes: Routes = [
       import('@myrmidon/pythia-term-list-page').then(
         (module) => module.PythiaTermListPageModule
       ),
-    // canActivate: [AuthGuardService]
+    canActivate: [AuthJwtGuardService],
   },
   {
     path: 'search',
@@ -53,7 +69,7 @@ const routes: Routes = [
       import('@myrmidon/pythia-search-page').then(
         (module) => module.PythiaSearchPageModule
       ),
-    // canActivate: [AuthGuardService]
+    canActivate: [AuthJwtGuardService],
   },
   { path: '**', component: HomeComponent },
 ];
