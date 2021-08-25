@@ -1,11 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  DataPage,
-  EnvService,
-  ErrorService,
-  Corpus,
-} from '@myrmidon/pythia-core';
+import { Corpus } from '@myrmidon/pythia-core';
+import { DataPage, EnvService, ErrorService } from '@myrmidon/ng-tools';
 import { Observable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { DocumentFilter } from './document.service';

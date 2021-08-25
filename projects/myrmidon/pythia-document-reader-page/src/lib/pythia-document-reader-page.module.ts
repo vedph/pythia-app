@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { EnvServiceProvider, NgToolsModule } from '@myrmidon/ng-tools';
 
 import { PythiaApiModule } from '@myrmidon/pythia-api';
-import { EnvServiceProvider, PythiaCoreModule } from '@myrmidon/pythia-core';
+import { PythiaCoreModule } from '@myrmidon/pythia-core';
 import { PythiaDocumentReaderModule } from '@myrmidon/pythia-document-reader';
 import { PythiaMaterialModule } from '@myrmidon/pythia-material';
 import { PythiaDocumentReaderPageComponent } from './components/pythia-document-reader-page/pythia-document-reader-page.component';
@@ -30,6 +31,7 @@ export const RouterModuleForChild = RouterModule.forChild([
     PythiaCoreModule,
     PythiaMaterialModule,
     PythiaDocumentReaderModule,
+    NgToolsModule
   ],
   exports: [PythiaDocumentReaderPageComponent],
   providers: [EnvServiceProvider],

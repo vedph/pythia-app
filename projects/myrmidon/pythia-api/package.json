@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^12.1.0",
-    "@angular/core": "^12.1.0"
+    "@angular/core": "^12.1.0",
+    "@myrmidon/pythia-core": "^0.0.1",
+    "@myrmidon/ng-tools": "^0.0.2"
   },
   "dependencies": {
     "tslib": "^2.2.0"

@@ -4,10 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { PythiaApiModule } from '@myrmidon/pythia-api';
-import { EnvServiceProvider, PythiaCoreModule } from '@myrmidon/pythia-core';
+import { PythiaCoreModule } from '@myrmidon/pythia-core';
 import { PythiaTermListModule } from '@myrmidon/pythia-term-list';
 import { PythiaMaterialModule } from '@myrmidon/pythia-material';
 import { PythiaTermListPageComponent } from './components/pythia-term-list-page/pythia-term-list-page.component';
+import { EnvServiceProvider, NgToolsModule } from '@myrmidon/ng-tools';
 
 // https://github.com/ng-packagr/ng-packagr/issues/778
 export const RouterModuleForChild = RouterModule.forChild([
@@ -30,6 +31,7 @@ export const RouterModuleForChild = RouterModule.forChild([
     PythiaCoreModule,
     PythiaMaterialModule,
     PythiaTermListModule,
+    NgToolsModule
   ],
   exports: [PythiaTermListPageComponent],
   providers: [EnvServiceProvider],

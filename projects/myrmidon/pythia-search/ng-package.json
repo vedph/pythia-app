@@ -9,6 +9,7 @@
       "@myrmidon/pythia-material": "@myrmidon/pythia-material",
       "@myrmidon/pythia-ui": "@myrmidon/pythia-ui",
       "@myrmidon/pythia-document-reader": "@myrmidon/pythia-document-reader",
+      "@myrmidon/ng-tools": "@myrmidon/ng-tools",
       "@datorama/akita": "@datorama/akita"
     }
   }

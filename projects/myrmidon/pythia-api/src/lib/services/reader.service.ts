@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ErrorService, EnvService, TextMapNode } from '@myrmidon/pythia-core';
+import { TextMapNode } from '@myrmidon/pythia-core';
+import { EnvService, ErrorService } from '@myrmidon/ng-tools';
 import { Observable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 

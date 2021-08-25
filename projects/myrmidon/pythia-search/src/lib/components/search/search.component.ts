@@ -9,7 +9,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
 import { KwicSearchResult, Search, SearchService } from '@myrmidon/pythia-api';
-import { DataPage, ResultWrapper } from '@myrmidon/pythia-core';
+import { DataPage, ErrorWrapper } from '@myrmidon/ng-tools';
 import { DocumentReadRequest } from '@myrmidon/pythia-document-reader';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, startWith, switchMap, tap } from 'rxjs/operators';
@@ -116,7 +116,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
       return this._searchService.search(search).pipe(
         // adapt server results to the paginator plugin
-        map((w: ResultWrapper<DataPage<KwicSearchResult>>) => {
+        map((w: ErrorWrapper<DataPage<KwicSearchResult>>) => {
           this.busy = false;
           if (w.error) {
             this._searchStateService.updateError(w.error);

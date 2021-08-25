@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EnvServiceProvider, NgToolsModule } from '@myrmidon/ng-tools';
 
 import { PythiaApiModule } from '@myrmidon/pythia-api';
-import { EnvServiceProvider } from '@myrmidon/pythia-core';
 import { PythiaMaterialModule } from '@myrmidon/pythia-material';
 
 import { PythiaStatsComponent } from './components/pythia-stats/pythia-stats.component';
@@ -17,6 +17,7 @@ import { PythiaStatsComponent } from './components/pythia-stats/pythia-stats.com
     // Pythia
     PythiaApiModule,
     PythiaMaterialModule,
+    NgToolsModule
   ],
   exports: [PythiaStatsComponent],
   providers: [EnvServiceProvider],

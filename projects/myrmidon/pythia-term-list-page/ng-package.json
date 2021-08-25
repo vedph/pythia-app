@@ -7,7 +7,8 @@
       "@myrmidon/pythia-term-list": "@myrmidon/pythia-term-list",
       "@myrmidon/pythia-api": "@myrmidon/pythia-api",
       "@myrmidon/pythia-core": "@myrmidon/pythia-core",
-      "@myrmidon/pythia-material": "@myrmidon/pythia-material"
+      "@myrmidon/pythia-material": "@myrmidon/pythia-material",
+      "@myrmidon/ng-tools": "@myrmidon/ng-tools"
     }
   }
 }

@@ -4,8 +4,8 @@ import {
   ErrorService,
   EnvService,
   DataPage,
-  ResultWrapper,
-} from '@myrmidon/pythia-core';
+  ErrorWrapper,
+} from '@myrmidon/ng-tools';
 import { Observable, of } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
@@ -52,10 +52,10 @@ export class SearchService {
    */
   public search(
     search: Search
-  ): Observable<ResultWrapper<DataPage<KwicSearchResult>>> {
+  ): Observable<ErrorWrapper<DataPage<KwicSearchResult>>> {
     // empty result set for invalid search parameters
     if (search.pageNumber < 1 || search.pageSize < 1 || !search.query) {
-      const w: ResultWrapper<DataPage<KwicSearchResult>> = {
+      const w: ErrorWrapper<DataPage<KwicSearchResult>> = {
         value: {
           items: [],
           pageNumber: search.pageNumber,
@@ -68,7 +68,7 @@ export class SearchService {
     }
 
     return this._http
-      .post<ResultWrapper<DataPage<KwicSearchResult>>>(
+      .post<ErrorWrapper<DataPage<KwicSearchResult>>>(
         this._env.get('apiUrl') + 'search',
         search
       )

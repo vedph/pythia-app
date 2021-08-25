@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EnvServiceProvider, NgToolsModule } from '@myrmidon/ng-tools';
 
 import { PythiaApiModule } from '@myrmidon/pythia-api';
-import { EnvServiceProvider, PythiaCoreModule } from '@myrmidon/pythia-core';
+import { PythiaCoreModule } from '@myrmidon/pythia-core';
 import { PythiaMaterialModule } from '@myrmidon/pythia-material';
 import { PythiaUiModule } from '@myrmidon/pythia-ui';
 
@@ -21,6 +22,7 @@ import { TermListComponent } from './components/term-list/term-list.component';
     PythiaCoreModule,
     PythiaMaterialModule,
     PythiaUiModule,
+    NgToolsModule
   ],
   exports: [TermFilterComponent, TermListComponent],
   providers: [EnvServiceProvider],

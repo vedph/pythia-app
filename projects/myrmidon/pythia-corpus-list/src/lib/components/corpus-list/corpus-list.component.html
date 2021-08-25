@@ -1,6 +1,6 @@
 <div
-  gdAreas="spinner spinner | filters list | . paginator | . editor"
-  gdAreas.lt-md="spinner | list | paginator | editor | filters"
+  gdAreas="spinner spinner | filters list | . pager | . editor"
+  gdAreas.lt-md="spinner | list | pager | editor | filters"
   gdColumns="200px 1fr"
   gdColumns.lt-md="1fr"
   gdGap="8px"
@@ -67,7 +67,7 @@
 
     <!-- pagination -->
     <mat-paginator
-      gdArea="pagination"
+      gdArea="pager"
       gdAlignColumns="center"
       gdAlignRows="start"
       [length]="pagination.total"

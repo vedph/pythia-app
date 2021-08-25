@@ -1,23 +1,3 @@
-/**
- * A page of data.
- */
- export interface DataPage<T> {
-  pageNumber: number;
-  pageSize: number;
-  pageCount: number;
-  total: number;
-  items: T[];
-}
-
-/**
- * A wrapper for a value and an error message. Any of the two should
- * be provided by the server.
- */
-export interface ResultWrapper<T> {
-  error?: string;
-  value?: T;
-}
-
 export interface Corpus {
   id: string;
   title: string;
@@ -63,36 +43,4 @@ export interface TextMapNode {
   selected?: boolean;
   children?: TextMapNode[];
   parent?: TextMapNode;
-}
-
-/**
- * Essential information about a user.
- */
- export interface UserInfo {
-  userName: string;
-  firstName: string;
-  lastName: string;
-}
-
-/**
- * Authenticated user data.
- */
-export interface User {
-  userName: string;
-  email: string;
-  roles: string[];
-  emailConfirmed?: boolean;
-  firstName: string;
-  lastName: string;
-  lockoutEnabled?: boolean;
-  lockoutEnd?: Date;
-}
-
-/**
- * User filter parameters.
- */
-export interface UserFilter {
-  pageNumber: number;
-  pageSize: number;
-  name?: string;
 }

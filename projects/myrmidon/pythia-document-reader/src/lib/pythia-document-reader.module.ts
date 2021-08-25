@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EnvServiceProvider, NgToolsModule } from '@myrmidon/ng-tools';
 
 import { PythiaApiModule } from '@myrmidon/pythia-api';
-import { EnvServiceProvider, PythiaCoreModule } from '@myrmidon/pythia-core';
+import { PythiaCoreModule } from '@myrmidon/pythia-core';
 import { PythiaMaterialModule } from '@myrmidon/pythia-material';
 import { DocumentReaderComponent } from './components/document-reader/document-reader.component';
 
@@ -17,6 +18,7 @@ import { DocumentReaderComponent } from './components/document-reader/document-r
     PythiaApiModule,
     PythiaCoreModule,
     PythiaMaterialModule,
+    NgToolsModule
   ],
   exports: [DocumentReaderComponent],
   providers: [EnvServiceProvider],

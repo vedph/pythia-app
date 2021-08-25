@@ -8,8 +8,9 @@ import { TERMS_PAGINATOR } from '../state/terms.paginator';
 import { TermsState } from '../state/terms.store';
 import { TermsQuery } from '../state/terms.query';
 import { map, startWith, switchMap, tap } from 'rxjs/operators';
-import { DataPage, IndexTerm } from '@myrmidon/pythia-core';
+import { IndexTerm } from '@myrmidon/pythia-core';
 import { PageEvent } from '@angular/material/paginator';
+import { DataPage } from '@myrmidon/ng-tools';
 
 @Component({
   selector: 'pythia-term-list',

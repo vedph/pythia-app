@@ -8,7 +8,8 @@
       "@myrmidon/pythia-core": "@myrmidon/pythia-core",
       "@myrmidon/pythia-document-list": "@myrmidon/pythia-document-list",
       "@myrmidon/pythia-material": "@myrmidon/pythia-material",
-      "@myrmidon/pythia-search": "@myrmidon/pythia-search"
+      "@myrmidon/pythia-search": "@myrmidon/pythia-search",
+      "@myrmidon/ng-tools": "@myrmidon/ng-tools"
     }
   }
 }

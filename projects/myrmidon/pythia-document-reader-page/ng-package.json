@@ -7,6 +7,7 @@
       "@myrmidon/pythia-document-reader": "@myrmidon/pythia-document-reader",
       "@myrmidon/pythia-api": "@myrmidon/pythia-api",
       "@myrmidon/pythia-core": "@myrmidon/pythia-core",
+      "@myrmidon/ng-tools": "@myrmidon/ng-tools",
       "@myrmidon/pythia-material": "@myrmidon/pythia-material"
     }
   }

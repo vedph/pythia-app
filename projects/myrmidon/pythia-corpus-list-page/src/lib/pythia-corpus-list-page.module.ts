@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { EnvServiceProvider, NgToolsModule } from '@myrmidon/ng-tools';
 import { PythiaApiModule } from '@myrmidon/pythia-api';
 
-import { EnvServiceProvider, PythiaCoreModule } from '@myrmidon/pythia-core';
+import { PythiaCoreModule } from '@myrmidon/pythia-core';
 import { PythiaCorpusListModule } from '@myrmidon/pythia-corpus-list';
 import { PythiaMaterialModule } from '@myrmidon/pythia-material';
 
@@ -31,6 +32,7 @@ export const RouterModuleForChild = RouterModule.forChild([
     PythiaCoreModule,
     PythiaMaterialModule,
     PythiaCorpusListModule,
+    NgToolsModule
   ],
   exports: [PythiaCorpusListPageComponent],
   providers: [EnvServiceProvider],

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { PythiaApiModule } from '@myrmidon/pythia-api';
-import { EnvServiceProvider, PythiaCoreModule } from '@myrmidon/pythia-core';
+import { PythiaCoreModule } from '@myrmidon/pythia-core';
 import { PythiaMaterialModule } from '@myrmidon/pythia-material';
 import { PythiaUiModule } from '@myrmidon/pythia-ui';
 
@@ -11,6 +11,7 @@ import { DocumentFilterComponent } from './components/document-filter/document-f
 import { DocumentInfoComponent } from './components/document-info/document-info.component';
 import { DocumentListComponent } from './components/document-list/document-list.component';
 import { DocumentCorpusComponent } from './components/document-corpus/document-corpus.component';
+import { EnvServiceProvider, NgToolsModule } from '@myrmidon/ng-tools';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { DocumentCorpusComponent } from './components/document-corpus/document-c
     PythiaApiModule,
     PythiaCoreModule,
     PythiaMaterialModule,
-    PythiaUiModule
+    PythiaUiModule,
+    NgToolsModule
   ],
   exports: [
     DocumentFilterComponent,

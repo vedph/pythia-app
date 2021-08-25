@@ -6,13 +6,14 @@ import { map, startWith, switchMap, take, tap } from 'rxjs/operators';
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
 
 import { CorpusFilter, CorpusService } from '@myrmidon/pythia-api';
-import { Corpus, DataPage } from '@myrmidon/pythia-core';
+import { Corpus } from '@myrmidon/pythia-core';
 
 import { CorporaState } from '../state/corpora.store';
 import { CorporaQuery } from '../state/corpora.query';
 import { CORPORA_PAGINATOR } from '../state/corpora.paginator';
 import { EditedCorpus } from '../corpus-editor/corpus-editor.component';
 import { DialogService } from '@myrmidon/pythia-ui';
+import { DataPage } from '@myrmidon/ng-tools';
 
 @Component({
   selector: 'pythia-corpus-list',

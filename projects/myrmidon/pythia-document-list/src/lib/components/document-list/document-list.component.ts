@@ -1,4 +1,10 @@
-import { Component, Inject, Output, EventEmitter, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Inject,
+  Output,
+  EventEmitter,
+  OnDestroy,
+} from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -10,7 +16,7 @@ import {
   DocumentFilter,
   DocumentService,
 } from '@myrmidon/pythia-api';
-import { DataPage, deepCopy, Document } from '@myrmidon/pythia-core';
+import { Document } from '@myrmidon/pythia-core';
 import { DocumentReadRequest } from '@myrmidon/pythia-document-reader';
 
 import { DOCUMENTS_PAGINATOR } from '../state/documents.paginator';
@@ -18,6 +24,7 @@ import { DocumentsQuery } from '../state/documents.query';
 import { DocumentsState } from '../state/documents.store';
 import { CorpusActionRequest } from '../document-corpus/document-corpus.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DataPage, deepCopy } from '@myrmidon/ng-tools';
 
 @Component({
   selector: 'pythia-document-list',
