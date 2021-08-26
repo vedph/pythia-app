@@ -100,7 +100,7 @@ export class DocumentReaderService {
       }
 
       this._readService
-        .getDocumentPieceFromPath(state.document!.id, path, 2)
+        .getDocumentPieceFromPath(state.document!.id, path)
         .pipe(take(1))
         .subscribe(
           (piece) => {
@@ -137,7 +137,7 @@ export class DocumentReaderService {
       }
 
       this._readService
-        .getDocumentPieceFromRange(state.document.id, start, end, 2)
+        .getDocumentPieceFromRange(state.document.id, start, end)
         .pipe(take(1))
         .subscribe(
           (piece) => {

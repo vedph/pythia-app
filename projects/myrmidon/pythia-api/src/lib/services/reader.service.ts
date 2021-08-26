@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TextMapNode } from '@myrmidon/pythia-core';
 import { EnvService, ErrorService } from '@myrmidon/ng-tools';
@@ -41,26 +41,15 @@ export class ReaderService {
    * Get the specified document piece from its path.
    * @param id The document's ID.
    * @param path The path.
-   * @param parts The output document parts to render: header=1, body=2,
-   * footer=4. You can combine these bit-values as desired.
    * @returns Piece.
    */
   public getDocumentPieceFromPath(
     id: number,
-    path: string,
-    parts: number
+    path: string
   ): Observable<{ text: string }> {
-    let httpParams = new HttpParams();
-    if (parts) {
-      httpParams = httpParams.set('parts', parts.toString());
-    }
-
     return this._http
       .get<{ text: string }>(
-        this._env.get('apiUrl') + 'documents/' + id + '/path/' + path,
-        {
-          params: httpParams,
-        }
+        this._env.get('apiUrl') + 'documents/' + id + '/path/' + path
       )
       .pipe(retry(3), catchError(this._error.handleError));
   }
@@ -70,21 +59,13 @@ export class ReaderService {
    * @param id The document's ID.
    * @param start The range start.
    * @param end The range end (exclusive).
-   * @param parts The output document parts to render: header=1, body=2,
-   * footer=4. You can combine these bit-values as desired.
    * @returns Piece.
    */
   public getDocumentPieceFromRange(
     id: number,
     start: number,
-    end: number,
-    parts: number
+    end: number
   ): Observable<{ text: string }> {
-    let httpParams = new HttpParams();
-    if (parts) {
-      httpParams = httpParams.set('parts', parts.toString());
-    }
-
     return this._http
       .get<{ text: string }>(
         this._env.get('apiUrl') +
@@ -93,10 +74,7 @@ export class ReaderService {
           '/range/' +
           start +
           '/' +
-          end,
-        {
-          params: httpParams,
-        }
+          end
       )
       .pipe(retry(3), catchError(this._error.handleError));
   }
