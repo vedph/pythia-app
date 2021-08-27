@@ -85,6 +85,31 @@ export class DocumentReaderService {
   }
 
   /**
+   * Extract the body element content from the specified HTML code.
+   * If no body element is found, just return the input code unchanged.
+   *
+   * @param html The HTML code.
+   * @returns The body's content extracted from the HTML code, or
+   * the code itself when it does not contain a body at all.
+   */
+  private extractBodyContent(html: string | null): string {
+    if (!html) {
+      return '';
+    }
+    if (html.indexOf('<body') === -1) {
+      return html;
+    }
+
+    // remove everything up to opening body
+    html = html.replace(/^.+<body\b[^>]*>/gs, '');
+
+    // remove everything from closing body
+    html = html.replace(/<\/body>$/gs, '');
+
+    return html;
+  }
+
+  /**
    * Load the text corresponding to the specified path in the document's map.
    * @param path The document's map path.
    * @returns A promise returning true when loading is complete.
@@ -104,7 +129,7 @@ export class DocumentReaderService {
         .pipe(take(1))
         .subscribe(
           (piece) => {
-            this._store.update({ text: piece.text });
+            this._store.update({ text: this.extractBodyContent(piece.text) });
             resolve(true);
           },
           (error) => {
@@ -141,7 +166,7 @@ export class DocumentReaderService {
         .pipe(take(1))
         .subscribe(
           (piece) => {
-            this._store.update({ text: piece.text });
+            this._store.update({ text: this.extractBodyContent(piece.text) });
             resolve(true);
           },
           (error) => {
