@@ -2,3 +2,33 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Text rendition */
+
+article.rendition {
+  font-family: Calibri, sans-serif;
+}
+article.rendition span.hit {
+  background-color: #f8ff3d;
+}
+article.rendition span.pers-name {
+  color: #598234;
+}
+article.rendition span.geog-name {
+  color: #339966;
+}
+article.rendition div {
+  margin: 16px 0;
+}
+article.rendition p {
+  margin: 4px 0;
+}
+article.rendition q {
+  font-style: italic;
+}
+article.rendition q:before,q:after{content:''}
+article.rendition span.nr {
+  color: silver;
+  font-size: 95%;
+  margin-right: 8px;
+}
