@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -25,12 +25,15 @@ import { KwicSearchResultEntity, SearchState } from '../state/search.store';
   styleUrls: ['./search.component.css'],
 })
 export class SearchComponent implements OnInit, OnDestroy {
+  @ViewChild("queryCtl") queryElementRef: ElementRef | undefined;
   public pagination$: Observable<PaginationResponse<KwicSearchResultEntity>>;
   public query$: Observable<string | undefined>;
+  public history$: Observable<string[]>;
   public loading$: Observable<boolean | undefined>;
   public readRequest$: Observable<DocumentReadRequest | undefined>;
   public pageSize: FormControl;
   public query: FormControl;
+  public history: FormControl;
   public form: FormGroup;
   public busy: boolean | undefined;
   public leftContextLabels: string[];
@@ -50,14 +53,17 @@ export class SearchComponent implements OnInit, OnDestroy {
       Validators.required,
       Validators.maxLength(1000),
     ]);
+    this.history = formBuilder.control([]);
     this.form = formBuilder.group({
       pageSize: this.pageSize,
       query: this.query,
+      history: this.history
     });
     this.leftContextLabels = ['5', '4', '3', '2', '1'];
     this.rightContextLabels = ['1', '2', '3', '4', '5'];
 
     this.query$ = _searchQuery.selectQuery();
+    this.history$ = _searchQuery.selectQueryHistory();
     this.loading$ = _searchQuery.selectLoading();
     this.readRequest$ = _searchQuery.selectReadRequest();
 
@@ -157,11 +163,31 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
   }
 
-  public search(): void {
-    if (this.form.invalid) {
+  public pickHistory(): void {
+    if (!this.history.value) {
       return;
     }
-    this._searchStateService.updateQuery(this.query.value?.trim());
+    this.query.setValue(this.history.value);
+    this.queryElementRef?.nativeElement.focus();
+  }
+
+  public search(): void {
+    if (this.form.invalid || this.busy) {
+      return;
+    }
+    const query = this.query.value?.trim();
+    this._searchStateService.updateQuery(query);
+    if (query) {
+      this._searchStateService.addToHistory(query);
+    }
+  }
+
+  public searchByEnter(event: KeyboardEvent): void {
+    if (this.busy) {
+      return;
+    }
+    event.stopPropagation();
+    this.search();
   }
 
   ngOnInit(): void {}

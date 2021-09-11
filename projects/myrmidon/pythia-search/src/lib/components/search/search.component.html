@@ -7,10 +7,12 @@
   <form gdArea="query" [formGroup]="form" (submit)="search()">
     <mat-form-field style="width: 100%">
       <textarea
+        #queryCtl
         rows="3"
         matInput
         [formControl]="query"
-        placeholder="query"
+        placeholder="query (ctrl+enter to submit)"
+        (keyup.control.enter)="searchByEnter($any($event))"
       ></textarea>
       <mat-error
         *ngIf="query.errors?.required && (query.dirty || query.touched)"
@@ -21,11 +23,32 @@
         >query too long</mat-error
       >
     </mat-form-field>
-    <div>
-      <button type="submit" mat-button>
+
+    <div style="display: flex">
+      <!-- submit -->
+      <button type="submit" mat-stroked-button [disabled]="form.invalid || busy">
         <mat-icon>search</mat-icon> search
       </button>
-      <mat-progress-bar mode="indeterminate" *ngIf="busy"></mat-progress-bar>
+      <!-- history -->
+      <mat-form-field
+        *ngIf="history$ | async as queries"
+        style="flex: 1 0 auto"
+      >
+        <mat-select [formControl]="history" placeholder="history">
+          <mat-option *ngFor="let q of queries" [value]="q">{{ q }}</mat-option>
+        </mat-select>
+        <button
+          mat-icon-button
+          matSuffix
+          [attr.aria-label]="'Pick the selected query'"
+          (click)="pickHistory()"
+        >
+          <mat-icon>check_circle</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <div *ngIf="busy">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>
   </form>
 

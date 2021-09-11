@@ -1,11 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  AttributeFilterType,
-  AttributeService,
-  DocumentFilter,
-} from '@myrmidon/pythia-api';
 import { DocumentReadRequest } from '@myrmidon/pythia-document-reader';
-import { take } from 'rxjs/operators';
 import { SearchStore } from './search.store';
 
 @Injectable({ providedIn: 'root' })
@@ -39,6 +33,25 @@ export class SearchStateService {
   public updateQuery(query: string | undefined): void {
     this._store.update({
       query: query,
+    });
+  }
+
+  /**
+   * Adds the specified query to the history, eventually removing
+   * its last entries when its maximum size is reached.
+   * @param query The query to add.
+   */
+  public addToHistory(query: string): void {
+    const queries: string[] = [...this._store.getValue().queryHistory];
+    if (queries.includes(query)) {
+      return;
+    }
+    queries.splice(0, 0, query);
+    if (queries.length > 10) {
+      queries.length = 10;
+    }
+    this._store.update({
+      queryHistory: queries
     });
   }
 
