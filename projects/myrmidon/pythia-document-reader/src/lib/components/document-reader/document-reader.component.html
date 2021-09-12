@@ -72,7 +72,7 @@
 
   <!-- text -->
   <div gdArea="text">
-    <h3>{{ doc.author }} - {{ doc.title }}</h3>
+    <h3 class="doc-head"><span *ngIf="doc.author">{{ doc.author }} - </span>{{ doc.title }}</h3>
     <div
       *ngIf="text$ | async as text"
       [innerHtml]="text"
