@@ -24,9 +24,14 @@
       >
     </mat-form-field>
 
-    <div style="display: flex">
+    <div style="display: flex; align-items: center">
       <!-- submit -->
-      <button type="submit" mat-stroked-button [disabled]="form.invalid || busy">
+      <button
+        type="submit"
+        mat-stroked-button
+        [disabled]="form.invalid || busy"
+        style="flex: 0 0 auto;margin-right: 8px;"
+      >
         <mat-icon>search</mat-icon> search
       </button>
       <!-- history -->

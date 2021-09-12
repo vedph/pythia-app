@@ -1,4 +1,12 @@
-import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -25,7 +33,10 @@ import { KwicSearchResultEntity, SearchState } from '../state/search.store';
   styleUrls: ['./search.component.css'],
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  @ViewChild("queryCtl") queryElementRef: ElementRef | undefined;
+  @ViewChild('queryCtl') queryElementRef: ElementRef | undefined;
+  @Input()
+  public initialQueryTerm: string | undefined;
+
   public pagination$: Observable<PaginationResponse<KwicSearchResultEntity>>;
   public query$: Observable<string | undefined>;
   public history$: Observable<string[]>;
@@ -57,7 +68,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.form = formBuilder.group({
       pageSize: this.pageSize,
       query: this.query,
-      history: this.history
+      history: this.history,
     });
     this.leftContextLabels = ['5', '4', '3', '2', '1'];
     this.rightContextLabels = ['1', '2', '3', '4', '5'];
@@ -110,6 +121,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     );
   }
 
+  ngOnInit(): void {
+    if (this.initialQueryTerm) {
+      this.query.setValue('[value="' + this.initialQueryTerm + '"]');
+      setTimeout(() => this.search(), 0);
+    }
+  }
+
   ngOnDestroy(): void {
     this.paginator.destroy();
   }
@@ -118,7 +136,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     search: Search
   ): () => Observable<PaginationResponse<KwicSearchResultEntity>> {
     return () => {
-      this.busy =true;
+      this.busy = true;
 
       return this._searchService.search(search).pipe(
         // adapt server results to the paginator plugin
@@ -168,7 +186,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       return;
     }
     this.query.setValue(this.history.value);
-    this.queryElementRef?.nativeElement.focus();
+    setTimeout(this.queryElementRef?.nativeElement.focus(), 0);
   }
 
   public search(): void {
@@ -189,8 +207,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     this.search();
   }
-
-  ngOnInit(): void {}
 
   public readDocument(id: number) {
     this._searchStateService.updateReadRequest({

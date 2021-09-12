@@ -64,6 +64,14 @@ const routes: Routes = [
     canActivate: [AuthJwtGuardService],
   },
   {
+    path: 'search/:term',
+    loadChildren: () =>
+      import('@myrmidon/pythia-search-page').then(
+        (module) => module.PythiaSearchPageModule
+      ),
+    canActivate: [AuthJwtGuardService],
+  },
+  {
     path: 'search',
     loadChildren: () =>
       import('@myrmidon/pythia-search-page').then(

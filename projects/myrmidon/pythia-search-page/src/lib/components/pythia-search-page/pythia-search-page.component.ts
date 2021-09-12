@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'pythia-pythia-search-page',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pythia-search-page.component.css']
 })
 export class PythiaSearchPageComponent implements OnInit {
+  public initialQueryTerm: string | undefined;
 
-  constructor() { }
+  constructor(route: ActivatedRoute) {
+    if ('term' in route.snapshot.params) {
+      this.initialQueryTerm = route.snapshot.params['term'];
+    }
+  }
 
   ngOnInit(): void {
   }
-
 }

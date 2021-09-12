@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
@@ -24,6 +24,9 @@ export class TermListComponent {
   public pagination$: Observable<PaginationResponse<IndexTerm>>;
   public pageSize: FormControl;
 
+  @Output()
+  public searchRequest: EventEmitter<string>;
+
   constructor(
     @Inject(TERMS_PAGINATOR)
     public paginator: PaginatorPlugin<TermsState>,
@@ -31,6 +34,7 @@ export class TermListComponent {
     termsQuery: TermsQuery,
     formBuilder: FormBuilder
   ) {
+    this.searchRequest = new EventEmitter<string>();
     this.pageSize = formBuilder.control(20);
     this._refresh$ = new BehaviorSubject(0);
     this._filter$ = termsQuery.selectFilter();
@@ -102,5 +106,9 @@ export class TermListComponent {
 
   public refresh(): void {
     this._refresh$.next(this._refresh$.value + 1);
+  }
+
+  public requestSearch(term: string): void {
+    this.searchRequest.emit(term);
   }
 }
