@@ -9,12 +9,12 @@
     "test": "ng test",
     "build-core": "ng build @myrmidon/pythia-core && ng build @myrmidon/pythia-material && ng build @myrmidon/pythia-ui && ng build @myrmidon/pythia-stats",
     "build-api": "ng build @myrmidon/pythia-api",
-    "build-doc-list": "ng build @myrmidon/pythia-document-list && ng build @myrmidon/pythia-document-list-page",
     "build-doc-reader": "ng build @myrmidon/pythia-document-reader && ng build @myrmidon/pythia-document-reader-page",
+    "build-doc-list": "ng build @myrmidon/pythia-document-list && ng build @myrmidon/pythia-document-list-page",
     "build-term-list": "ng build @myrmidon/pythia-term-list && ng build @myrmidon/pythia-term-list-page",
     "build-corpus-list": "ng build @myrmidon/pythia-corpus-list && ng build @myrmidon/pythia-corpus-list-page",
     "build-search": "ng build @myrmidon/pythia-search && ng build @myrmidon/pythia-search-page",
-    "build-lib": "npm run build-core && npm run build-api && npm run build-doc-list && npm run build-doc-reader && npm run build-term-list && npm run build-corpus-list && npm run build-search"
+    "build-lib": "npm run build-core && npm run build-api && npm run build-doc-reader && npm run build-doc-list && npm run build-term-list && npm run build-corpus-list && npm run build-search"
   },
   "private": true,
   "dependencies": {
