@@ -2,13 +2,6 @@
   "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../../dist/myrmidon/pythia-document-reader",
   "lib": {
-    "entryFile": "src/public-api.ts",
-    "umdModuleIds": {
-      "@myrmidon/pythia-api": "@myrmidon/pythia-api",
-      "@myrmidon/pythia-core": "@myrmidon/pythia-core",
-      "@myrmidon/pythia-material": "@myrmidon/pythia-material",
-      "@myrmidon/ng-tools": "@myrmidon/ng-tools",
-      "@datorama/akita": "@datorama/akita"
-    }
+    "entryFile": "src/public-api.ts"
   }
 }
