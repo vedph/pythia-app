@@ -17,7 +17,7 @@ export interface DocumentReadRequest {
   selector: 'pythia-document-reader',
   templateUrl: './document-reader.component.html',
   styleUrls: ['./document-reader.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class DocumentReaderComponent implements OnInit {
   private _busy: boolean | undefined;
@@ -28,6 +28,15 @@ export class DocumentReaderComponent implements OnInit {
     return this._request;
   }
   public set request(value: DocumentReadRequest | undefined) {
+    if (
+      this._request &&
+      value &&
+      this._request.documentId === value.documentId &&
+      this._request.start === value.start &&
+      this._request.end === value.end
+    ) {
+      return;
+    }
     this._request = value;
     if (value) {
       this._drService.load(value);
