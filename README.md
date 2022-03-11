@@ -33,3 +33,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 [pythia-ui] --> [pythia-material]
 @enduml
 ```
+
+## History
+
+- 2022-03-11: upgraded Angular to 13.2.6.
