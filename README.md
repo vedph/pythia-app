@@ -34,6 +34,15 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 @enduml
 ```
 
+## Docker
+
+Quick Docker image build:
+
+1. `npm run build-lib`
+2. update version in `env.js` and `ng build --configuration production`
+3. `docker build . -t vedph2020/pythia-app:0.0.1 -t vedph2020/pythia-app:latest` (replace with the current version).
+
 ## History
 
+- 2022-04-18: upgraded Angular to 13.3.3 and added Docker files.
 - 2022-03-11: upgraded Angular to 13.2.6.
