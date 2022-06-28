@@ -6,9 +6,13 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { TermFilter } from '@myrmidon/pythia-api';
+import {
+  CorpusService,
+  ProfileService,
+  TermFilter,
+} from '@myrmidon/pythia-api';
 import { Attribute, Corpus, Profile } from '@myrmidon/pythia-core';
-import { Observable } from 'rxjs';
+import { forkJoin, from, Observable } from 'rxjs';
 
 import { TermsQuery } from '../state/terms.query';
 import { TermsService } from '../state/terms.service';
@@ -28,28 +32,30 @@ export class TermFilterComponent implements OnInit {
   public docAttributes$: Observable<string[]>;
   public tokAttributes$: Observable<string[]>;
 
-  public corpus: FormControl;
-  public author: FormControl;
-  public title: FormControl;
-  public source: FormControl;
-  public profile: FormControl;
-  public minDateValue: FormControl;
-  public maxDateValue: FormControl;
-  public minTimeModified: FormControl;
-  public maxTimeModified: FormControl;
+  public corpus: FormControl<Corpus | null>;
+  public author: FormControl<string | null>;
+  public title: FormControl<string | null>;
+  public source: FormControl<string | null>;
+  public profile: FormControl<Profile | null>;
+  public minDateValue: FormControl<number | null>;
+  public maxDateValue: FormControl<number | null>;
+  public minTimeModified: FormControl<Date | null>;
+  public maxTimeModified: FormControl<Date | null>;
   public docAttributes: FormArray;
   public tokAttributes: FormArray;
-  public valuePattern: FormControl;
-  public minCount: FormControl;
-  public maxCount: FormControl;
-  public sortOrder: FormControl;
-  public descending: FormControl;
+  public valuePattern: FormControl<string | null>;
+  public minCount: FormControl<number | null>;
+  public maxCount: FormControl<number | null>;
+  public sortOrder: FormControl<number>;
+  public descending: FormControl<boolean>;
   public form: FormGroup;
 
   constructor(
     private _formBuilder: FormBuilder,
     query: TermsQuery,
-    private _termsService: TermsService
+    private _termsService: TermsService,
+    private _corpusService: CorpusService,
+    private _profileService: ProfileService
   ) {
     this.filter$ = query.selectFilter();
     this.docAttributes$ = query.selectDocAttributes();
@@ -71,8 +77,8 @@ export class TermFilterComponent implements OnInit {
     this.valuePattern = _formBuilder.control(null);
     this.minCount = _formBuilder.control(0);
     this.maxCount = _formBuilder.control(0);
-    this.sortOrder = _formBuilder.control(0);
-    this.descending = _formBuilder.control(false);
+    this.sortOrder = _formBuilder.control(0, { nonNullable: true });
+    this.descending = _formBuilder.control(false, { nonNullable: true });
     this.form = _formBuilder.group({
       corpus: this.corpus,
       author: this.author,
@@ -127,25 +133,34 @@ export class TermFilterComponent implements OnInit {
   }
 
   private updateForm(filter: TermFilter): void {
-    this.corpus.setValue(filter.corpusId);
-    this.author.setValue(filter.author);
-    this.title.setValue(filter.title);
-    this.source.setValue(filter.source);
-    this.profile.setValue({ id: filter.profileId });
-    this.minDateValue.setValue(filter.minDateValue);
-    this.maxDateValue.setValue(filter.maxDateValue);
-    this.minTimeModified.setValue(filter.minTimeModified);
-    this.maxTimeModified.setValue(filter.maxTimeModified);
-    this.valuePattern.setValue(filter.valuePattern);
-    this.minCount.setValue(filter.minCount);
-    this.maxCount.setValue(filter.maxCount);
+    this.author.setValue(filter.author || null);
+    this.title.setValue(filter.title || null);
+    this.source.setValue(filter.source || null);
+    this.minDateValue.setValue(filter.minDateValue || null);
+    this.maxDateValue.setValue(filter.maxDateValue || null);
+    this.minTimeModified.setValue(filter.minTimeModified || null);
+    this.maxTimeModified.setValue(filter.maxTimeModified || null);
+    this.valuePattern.setValue(filter.valuePattern || null);
+    this.minCount.setValue(filter.minCount || null);
+    this.maxCount.setValue(filter.maxCount || null);
     this.sortOrder.setValue(filter.sortOrder || 0);
     this.descending.setValue(filter.descending ? true : false);
 
     this.updateAttributes(filter.docAttributes, false);
     this.updateAttributes(filter.tokAttributes, true);
 
-    this.form.markAsPristine();
+    forkJoin({
+      corpus: filter.corpusId
+        ? this._corpusService.getCorpus(filter.corpusId, true)
+        : from(null as any),
+      profile: filter.profileId
+        ? this._profileService.getProfile(filter.profileId)
+        : from(null as any),
+    }).subscribe((result) => {
+      this.corpus.setValue(result.corpus as Corpus);
+      this.profile.setValue(result.profile as Profile);
+      this.form.markAsPristine();
+    });
   }
 
   public onCorpusChange(corpus: Corpus | null): void {
@@ -217,19 +232,19 @@ export class TermFilterComponent implements OnInit {
       title: this.title.value?.trim(),
       source: this.source.value?.trim(),
       profileId: this.profile.value?.id,
-      minDateValue: this.minDateValue.value,
-      maxDateValue: this.maxDateValue.value,
-      minTimeModified: this.minTimeModified.value,
-      maxTimeModified: this.maxTimeModified.value,
+      minDateValue: this.minDateValue.value || undefined,
+      maxDateValue: this.maxDateValue.value || undefined,
+      minTimeModified: this.minTimeModified.value || undefined,
+      maxTimeModified: this.maxTimeModified.value || undefined,
       docAttributes: this.getAttributes(false)
         ?.map((a) => `${a.name}=${a.value}`)
         ?.join(','),
       tokAttributes: this.getAttributes(true)
         ?.map((a) => `${a.name}=${a.value}`)
         ?.join(','),
-      valuePattern: this.valuePattern.value,
-      minCount: this.minCount.value,
-      maxCount: this.maxCount.value,
+      valuePattern: this.valuePattern.value || undefined,
+      minCount: this.minCount.value || undefined,
+      maxCount: this.maxCount.value || undefined,
       sortOrder: this.sortOrder.value,
       descending: this.descending.value ? true : false,
     };

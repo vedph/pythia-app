@@ -25,7 +25,7 @@ export class CorpusListComponent implements OnDestroy {
   private _filter$: Observable<CorpusFilter>;
 
   public pagination$: Observable<PaginationResponse<Corpus>>;
-  public pageSize: FormControl;
+  public pageSize: FormControl<number>;
   public editedCorpus: Corpus | undefined;
 
   constructor(
@@ -36,7 +36,7 @@ export class CorpusListComponent implements OnDestroy {
     private _dialogService: DialogService,
     formBuilder: FormBuilder
   ) {
-    this.pageSize = formBuilder.control(20);
+    this.pageSize = formBuilder.control(20, { nonNullable: true });
     this._refresh$ = new BehaviorSubject(0);
     this._filter$ = corporaQuery.selectFilter();
 

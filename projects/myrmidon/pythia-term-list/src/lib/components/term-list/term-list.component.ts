@@ -22,7 +22,7 @@ export class TermListComponent {
   private _filter$: Observable<TermFilter>;
 
   public pagination$: Observable<PaginationResponse<IndexTerm>>;
-  public pageSize: FormControl;
+  public pageSize: FormControl<number>;
 
   @Output()
   public searchRequest: EventEmitter<string>;
@@ -35,7 +35,7 @@ export class TermListComponent {
     formBuilder: FormBuilder
   ) {
     this.searchRequest = new EventEmitter<string>();
-    this.pageSize = formBuilder.control(20);
+    this.pageSize = formBuilder.control(20, { nonNullable: true });
     this._refresh$ = new BehaviorSubject(0);
     this._filter$ = termsQuery.selectFilter();
 

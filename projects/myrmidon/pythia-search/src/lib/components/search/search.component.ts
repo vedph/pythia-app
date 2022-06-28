@@ -15,12 +15,15 @@ import {
 } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map, startWith, switchMap, tap } from 'rxjs/operators';
+
 import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
+
 import { KwicSearchResult, Search, SearchService } from '@myrmidon/pythia-api';
 import { DataPage, ErrorWrapper } from '@myrmidon/ng-tools';
 import { DocumentReadRequest } from '@myrmidon/pythia-document-reader';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, map, startWith, switchMap, tap } from 'rxjs/operators';
+
 import { SearchStateService } from '../state/search-state.service';
 import { SEARCH_PAGINATOR } from '../state/search.paginator';
 
@@ -42,9 +45,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   public history$: Observable<string[]>;
   public loading$: Observable<boolean | undefined>;
   public readRequest$: Observable<DocumentReadRequest | undefined>;
-  public pageSize: FormControl;
-  public query: FormControl;
-  public history: FormControl;
+  public pageSize: FormControl<number>;
+  public query: FormControl<string | null>;
+  public history: FormControl<string | null>;
   public form: FormGroup;
   public busy: boolean | undefined;
   public leftContextLabels: string[];
@@ -53,18 +56,17 @@ export class SearchComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(SEARCH_PAGINATOR)
     public paginator: PaginatorPlugin<SearchState>,
-    private _searchQuery: SearchQuery,
+    searchQuery: SearchQuery,
     private _searchStateService: SearchStateService,
     private _searchService: SearchService,
-    private _snackbar: MatSnackBar,
     formBuilder: FormBuilder
   ) {
-    this.pageSize = formBuilder.control(20);
+    this.pageSize = formBuilder.control(20, { nonNullable: true });
     this.query = formBuilder.control(null, [
       Validators.required,
       Validators.maxLength(1000),
     ]);
-    this.history = formBuilder.control([]);
+    this.history = formBuilder.control(null);
     this.form = formBuilder.group({
       pageSize: this.pageSize,
       query: this.query,
@@ -73,10 +75,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.leftContextLabels = ['5', '4', '3', '2', '1'];
     this.rightContextLabels = ['1', '2', '3', '4', '5'];
 
-    this.query$ = _searchQuery.selectQuery();
-    this.history$ = _searchQuery.selectQueryHistory();
-    this.loading$ = _searchQuery.selectLoading();
-    this.readRequest$ = _searchQuery.selectReadRequest();
+    this.query$ = searchQuery.selectQuery();
+    this.history$ = searchQuery.selectQueryHistory();
+    this.loading$ = searchQuery.selectLoading();
+    this.readRequest$ = searchQuery.selectReadRequest();
 
     // https://datorama.github.io/akita/docs/plugins/pagination/
     this.pagination$ = combineLatest([

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import {
   debounceTime,
@@ -25,12 +25,12 @@ export class LookupCorpusComponent implements OnInit {
   @Output()
   public itemChange: EventEmitter<Corpus | null>;
 
-  public form: FormGroup;
-  public lookup: FormControl;
+  public form: UntypedFormGroup;
+  public lookup: UntypedFormControl;
   public items$: Observable<Corpus[]>;
   public item: Corpus | undefined;
 
-  constructor(formBuilder: FormBuilder, private _corpusService: CorpusService) {
+  constructor(formBuilder: UntypedFormBuilder, private _corpusService: CorpusService) {
     // events
     this.itemChange = new EventEmitter<Corpus | null>();
     // form

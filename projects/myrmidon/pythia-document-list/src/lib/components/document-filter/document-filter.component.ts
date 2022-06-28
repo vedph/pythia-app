@@ -6,9 +6,13 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { DocumentFilter } from '@myrmidon/pythia-api';
+import {
+  CorpusService,
+  DocumentFilter,
+  ProfileService,
+} from '@myrmidon/pythia-api';
 import { Attribute, Corpus, Profile } from '@myrmidon/pythia-core';
-import { Observable } from 'rxjs';
+import { forkJoin, from, Observable } from 'rxjs';
 
 import { DocumentsQuery } from '../state/documents.query';
 import { DocumentsService } from '../state/documents.service';
@@ -27,24 +31,26 @@ export class DocumentFilterComponent implements OnInit {
   public filter$: Observable<DocumentFilter>;
   public attributes$: Observable<string[]>;
 
-  public corpus: FormControl;
-  public author: FormControl;
-  public title: FormControl;
-  public source: FormControl;
-  public profile: FormControl;
-  public minDateValue: FormControl;
-  public maxDateValue: FormControl;
-  public minTimeModified: FormControl;
-  public maxTimeModified: FormControl;
+  public corpus: FormControl<Corpus | null>;
+  public author: FormControl<string | null>;
+  public title: FormControl<string | null>;
+  public source: FormControl<string | null>;
+  public profile: FormControl<Profile | null>;
+  public minDateValue: FormControl<number | null>;
+  public maxDateValue: FormControl<number | null>;
+  public minTimeModified: FormControl<Date | null>;
+  public maxTimeModified: FormControl<Date | null>;
   public attributes: FormArray;
-  public sortOrder: FormControl;
-  public descending: FormControl;
+  public sortOrder: FormControl<number>;
+  public descending: FormControl<boolean>;
   public form: FormGroup;
 
   constructor(
     private _formBuilder: FormBuilder,
     query: DocumentsQuery,
-    private _docsService: DocumentsService
+    private _docService: DocumentsService,
+    private _corpusService: CorpusService,
+    private _profileService: ProfileService
   ) {
     this.filter$ = query.selectFilter();
     this.attributes$ = query.selectAttributes();
@@ -61,8 +67,8 @@ export class DocumentFilterComponent implements OnInit {
     this.minTimeModified = _formBuilder.control(null);
     this.maxTimeModified = _formBuilder.control(null);
     this.attributes = _formBuilder.array([]);
-    this.sortOrder = _formBuilder.control(0);
-    this.descending = _formBuilder.control(false);
+    this.sortOrder = _formBuilder.control(0, { nonNullable: true });
+    this.descending = _formBuilder.control(false, { nonNullable: true });
     this.form = _formBuilder.group({
       corpus: this.corpus,
       author: this.author,
@@ -80,7 +86,7 @@ export class DocumentFilterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._docsService.loadLookup();
+    this._docService.loadLookup();
     this.filter$.subscribe((f) => {
       this.updateForm(f);
     });
@@ -101,15 +107,13 @@ export class DocumentFilterComponent implements OnInit {
   }
 
   private updateForm(filter: DocumentFilter): void {
-    this.corpus.setValue(filter.corpusId);
-    this.author.setValue(filter.author);
-    this.title.setValue(filter.title);
-    this.source.setValue(filter.source);
-    this.profile.setValue({ id: filter.profileId });
-    this.minDateValue.setValue(filter.minDateValue);
-    this.maxDateValue.setValue(filter.maxDateValue);
-    this.minTimeModified.setValue(filter.minTimeModified);
-    this.maxTimeModified.setValue(filter.maxTimeModified);
+    this.author.setValue(filter.author || null);
+    this.title.setValue(filter.title || null);
+    this.source.setValue(filter.source || null);
+    this.minDateValue.setValue(filter.minDateValue || null);
+    this.maxDateValue.setValue(filter.maxDateValue || null);
+    this.minTimeModified.setValue(filter.minTimeModified || null);
+    this.maxTimeModified.setValue(filter.maxTimeModified || null);
     this.sortOrder.setValue(filter.sortOrder || 0);
     this.descending.setValue(filter.descending ? true : false);
 
@@ -119,11 +123,22 @@ export class DocumentFilterComponent implements OnInit {
       this.attributes.push(this.getAttributeGroup(attrs[i]));
     }
 
-    this.form.markAsPristine();
+    forkJoin({
+      corpus: filter.corpusId
+        ? this._corpusService.getCorpus(filter.corpusId, true)
+        : from(null as any),
+      profile: filter.profileId
+        ? this._profileService.getProfile(filter.profileId)
+        : from(null as any),
+    }).subscribe((result) => {
+      this.corpus.setValue(result.corpus as Corpus);
+      this.profile.setValue(result.profile as Profile);
+      this.form.markAsPristine();
+    });
   }
 
   public onCorpusChange(corpus: Corpus | null): void {
-    this.corpus.setValue(corpus);
+    this.corpus.setValue(corpus || null);
   }
 
   public onCorpusRemoved(): void {
@@ -179,10 +194,10 @@ export class DocumentFilterComponent implements OnInit {
       title: this.title.value?.trim(),
       source: this.source.value?.trim(),
       profileId: this.profile.value?.id,
-      minDateValue: this.minDateValue.value,
-      maxDateValue: this.maxDateValue.value,
-      minTimeModified: this.minTimeModified.value,
-      maxTimeModified: this.maxTimeModified.value,
+      minDateValue: this.minDateValue.value || undefined,
+      maxDateValue: this.maxDateValue.value || undefined,
+      minTimeModified: this.minTimeModified.value || undefined,
+      maxTimeModified: this.maxTimeModified.value || undefined,
       attributes: this.getAttributes()
         ?.map((a) => `${a.name}=${a.value}`)
         ?.join(','),
@@ -203,6 +218,6 @@ export class DocumentFilterComponent implements OnInit {
     const filter = this.getFilter();
 
     // update filter in state
-    this._docsService.updateFilter(filter);
+    this._docService.updateFilter(filter);
   }
 }

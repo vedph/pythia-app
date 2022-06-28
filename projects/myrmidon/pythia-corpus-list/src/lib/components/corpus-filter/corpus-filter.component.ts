@@ -18,8 +18,8 @@ export class CorpusFilterComponent implements OnInit {
 
   public filter$: Observable<CorpusFilter>;
 
-  public id: FormControl;
-  public title: FormControl;
+  public id: FormControl<string | null>;
+  public title: FormControl<string | null>;
   public form: FormGroup;
 
   constructor(
@@ -45,8 +45,8 @@ export class CorpusFilterComponent implements OnInit {
   }
 
   private updateForm(filter: CorpusFilter): void {
-    this.id.setValue(filter.id);
-    this.title.setValue(filter.title);
+    this.id.setValue(filter.id || null);
+    this.title.setValue(filter.title || null);
     this.form.markAsPristine();
   }
 

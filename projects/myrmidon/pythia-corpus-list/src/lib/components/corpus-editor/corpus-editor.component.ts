@@ -35,9 +35,9 @@ export class CorpusEditorComponent implements OnInit {
   public editorClose: EventEmitter<any>;
 
   public id: string | undefined;
-  public title: FormControl;
-  public description: FormControl;
-  public sourceId: FormControl;
+  public title: FormControl<string | null>;
+  public description: FormControl<string | null>;
+  public sourceId: FormControl<string | null>;
   public form: FormGroup;
 
   constructor(formBuilder: FormBuilder) {
@@ -78,9 +78,9 @@ export class CorpusEditorComponent implements OnInit {
   private getCorpus(): EditedCorpus {
     return {
       id: this._corpus!.id,
-      title: this.title.value?.trim(),
+      title: this.title.value?.trim() || '',
       description: this.description.value?.trim() || '',
-      sourceId: this.sourceId.value,
+      sourceId: this.sourceId.value || undefined,
     };
   }
 

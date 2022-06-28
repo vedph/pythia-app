@@ -36,7 +36,7 @@ export class DocumentListComponent implements OnDestroy {
   private _filter$: Observable<DocumentFilter>;
 
   public pagination$: Observable<PaginationResponse<Document>>;
-  public pageSize: FormControl;
+  public pageSize: FormControl<number>;
   public selectedDocument: Document | undefined;
 
   @Output()
@@ -53,7 +53,7 @@ export class DocumentListComponent implements OnDestroy {
   ) {
     this.readRequest = new EventEmitter<DocumentReadRequest>();
 
-    this.pageSize = formBuilder.control(20);
+    this.pageSize = formBuilder.control(20, { nonNullable: true });
     this._refresh$ = new BehaviorSubject(0);
     this._filter$ = _docsQuery.selectFilter();
 

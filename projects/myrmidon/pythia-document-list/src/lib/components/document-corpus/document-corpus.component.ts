@@ -18,8 +18,8 @@ export interface CorpusActionRequest {
   styleUrls: ['./document-corpus.component.css'],
 })
 export class DocumentCorpusComponent implements OnInit {
-  public corpusId: FormControl;
-  public action: FormControl;
+  public corpusId: FormControl<string | null>;
+  public action: FormControl<string | null>;
   public form: FormGroup;
 
   @Output()
@@ -42,7 +42,7 @@ export class DocumentCorpusComponent implements OnInit {
   ngOnInit(): void {}
 
   public onCorpusPicked(corpus: Corpus | null): void {
-    this.corpusId.setValue(corpus?.id);
+    this.corpusId.setValue(corpus?.id || null);
   }
 
   public apply(): void {
@@ -50,8 +50,8 @@ export class DocumentCorpusComponent implements OnInit {
       return;
     }
     this.corpusAction.emit({
-      corpusId: this.corpusId.value?.trim(),
-      action: this.action.value,
+      corpusId: this.corpusId.value?.trim() || '',
+      action: this.action.value || '',
     });
   }
 }
