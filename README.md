@@ -59,6 +59,7 @@ will automatically populate the specified POSTGRES_DB for you.
 
 ## History
 
+- 2022-07-10: upgraded Angular.
 - 2022-06-26: upgraded Angular to 14 and refactored forms into typed.
 
 ### 0.0.1
