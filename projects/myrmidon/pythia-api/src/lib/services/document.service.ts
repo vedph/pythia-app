@@ -109,11 +109,18 @@ export class DocumentService {
   /**
    * Get the document with the specified ID.
    * @param id The document's ID.
+   * @param content True to retrieve the document's content.
    * @returns Oservable with document.
    */
-  public getDocument(id: number): Observable<Document> {
+  public getDocument(id: number, content = false): Observable<Document> {
+    let httpParams = new HttpParams();
+    if (content) {
+      httpParams = httpParams.set('content', 'true');
+    }
     return this._http
-      .get<Document>(this._env.get('apiUrl') + 'documents/' + id)
+      .get<Document>(this._env.get('apiUrl') + 'documents/' + id, {
+        params: httpParams,
+      })
       .pipe(retry(3), catchError(this._error.handleError));
   }
 }

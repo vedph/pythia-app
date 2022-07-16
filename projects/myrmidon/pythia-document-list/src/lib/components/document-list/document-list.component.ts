@@ -136,6 +136,9 @@ export class DocumentListComponent implements OnDestroy {
 
   public showInfo(document: Document): void {
     this.selectedDocument = deepCopy(document);
+    this._docService.getDocument(document.id).pipe(take(1)).subscribe(d => {
+      this.selectedDocument = d;
+    });
   }
 
   public onCorpusAction(request: CorpusActionRequest): void {
@@ -145,20 +148,20 @@ export class DocumentListComponent implements OnDestroy {
         this._corpusService
           .addDocumentsByFilter(request.corpusId, filter)
           .pipe(take(1))
-          .subscribe(
-            (_) => {
+          .subscribe({
+            next: (_) => {
               this._snackbar.open('Corpus updated', 'OK', {
                 duration: 2000,
               });
             },
-            (error) => {
+            error: (error) => {
               console.error('Error adding documents by filter');
               if (error) {
                 console.error(JSON.stringify(error));
               }
               this._snackbar.open('Error updating corpus', 'OK');
-            }
-          );
+            },
+          });
         break;
       case 'del-filtered':
         this._corpusService
