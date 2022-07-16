@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import {
   debounceTime,
@@ -25,13 +25,13 @@ export class LookupProfileComponent implements OnInit {
   @Output()
   public itemChange: EventEmitter<Profile | null>;
 
-  public form: UntypedFormGroup;
-  public lookup: UntypedFormControl;
+  public form: FormGroup;
+  public lookup: FormControl;
   public items$: Observable<Profile[]>;
   public item: Profile | undefined;
 
   constructor(
-    formBuilder: UntypedFormBuilder,
+    formBuilder: FormBuilder,
     private _profileService: ProfileService
   ) {
     // events
