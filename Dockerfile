@@ -4,7 +4,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 RUN rm /etc/nginx/conf.d/default.conf
 
 WORKDIR /usr/share/nginx/html
-COPY dist/pythia-app/ .
+COPY dist/pythia/ .
 
 EXPOSE 80
 # ENTRYPOINT ["nginx", "-g", "daemon off;"]
