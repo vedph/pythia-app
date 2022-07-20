@@ -152,10 +152,10 @@ export class TermFilterComponent implements OnInit {
     forkJoin({
       corpus: filter.corpusId
         ? this._corpusService.getCorpus(filter.corpusId, true)
-        : from(null as any),
+        : from([] as any),
       profile: filter.profileId
         ? this._profileService.getProfile(filter.profileId)
-        : from(null as any),
+        : from([] as any),
     }).subscribe((result) => {
       this.corpus.setValue(result.corpus as Corpus);
       this.profile.setValue(result.profile as Profile);
