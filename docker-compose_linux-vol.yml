@@ -42,7 +42,7 @@ services:
     depends_on:
       - pythia-api
     networks:
-      - cadmus-network
+      - pythia-network
 
 networks:
   pythia-network:
