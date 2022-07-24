@@ -42,7 +42,7 @@ Quick Docker image build:
 2. update version in `env.js` and `ng build --configuration production`
 3. `docker build . -t vedph2020/pythia-app:0.0.2 -t vedph2020/pythia-app:latest` (replace with the current version).
 
-Note: The official [postgres image](https://hub.docker.com/_/postgres/) will import and execute all SQL files placed in that folder. So something like:
+Note: The official [postgres image](https://hub.docker.com/_/postgres/) will import and execute all SQL files placed in a specific folder. So something like:
 
 ```yaml
 services:
@@ -55,7 +55,30 @@ services:
     - ./devops/db/dummy_dump.sql:/docker-entrypoint-initdb.d/dummy_dump.sql
 ```
 
-will automatically populate the specified POSTGRES_DB for you.
+will automatically populate the specified POSTGRES_DB for you. You can create a dump of your Pythia database, prepend to it instructions to create and select it, and then place it in that folder:
+
+(1) add to the `postgres` service a volume pointing to your dump file. In this example, the file is named `pythia.sql` and was placed in a Ubuntu host under `/opt`.
+
+```yaml
+volumes:
+  - /opt/pythia.sql:/docker-entrypoint-initdb.d/pythia.sql
+```
+
+(2) create your dump like this (the sample refers to a Windows OS):
+
+```ps1
+./pg_dump --username=postgres -f c:\users\dfusi\desktop\pythia.sql pythia
+```
+
+(3) ensure that your dump file starts with the instructions to create and select the `pythia` database:
+
+```sql
+-- prepend these commands:
+CREATE DATABASE pythia WITH TEMPLATE template0 OWNER postgres;
+\c pythia
+
+-- dump follows here ...
+```
 
 ## History
 
