@@ -92,6 +92,8 @@ CREATE DATABASE pythia WITH TEMPLATE template0 OWNER postgres;
 
 ## History
 
+- 2022-09-02: fix to document filters attributes.
+
 ### 0.0.3
 
 - 2022-07-31: updated packages.

@@ -117,7 +117,7 @@ export class DocumentFilterComponent implements OnInit {
     this.sortOrder.setValue(filter.sortOrder || 0);
     this.descending.setValue(filter.descending ? true : false);
 
-    this.attributes.reset();
+    this.attributes.clear({ emitEvent: false });
     const attrs = this.parseAttributes(filter.attributes);
     for (let i = 0; i < attrs.length; i++) {
       this.attributes.push(this.getAttributeGroup(attrs[i]));
@@ -178,7 +178,7 @@ export class DocumentFilterComponent implements OnInit {
       entries.push({
         targetId: 0, // not used
         name: g.controls.name.value?.trim(),
-        value: g.controls.name.value?.trim(),
+        value: g.controls.value.value?.trim(),
       });
     }
     return entries.length ? entries : undefined;
@@ -207,6 +207,7 @@ export class DocumentFilterComponent implements OnInit {
   }
 
   public reset(): void {
+    this.attributes.clear({ emitEvent: false });
     this.form.reset();
     this.apply();
   }
