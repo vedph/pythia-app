@@ -92,6 +92,7 @@ CREATE DATABASE pythia WITH TEMPLATE template0 OWNER postgres;
 
 ## History
 
+- 2022-11-10: updated Angular.
 - 2022-11-05: updated Angular.
 - 2022-09-02: fix to document filters attributes.
 
